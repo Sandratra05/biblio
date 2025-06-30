@@ -65,4 +65,5 @@ public class Profil {
     public void setQuotaReservation(Integer quotaReservation) {
         this.quotaReservation = quotaReservation;
     }
+
 }

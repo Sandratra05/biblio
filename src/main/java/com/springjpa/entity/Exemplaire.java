@@ -20,15 +20,20 @@ public class Exemplaire {
     @ManyToOne
     @JoinColumn(name = "id_livre", nullable = false)
     private Livre livre;
+
+    @Column(name = "dispo")
+    private boolean dispo;
     
-    // Constructeurs
-    public Exemplaire() {}
-    
-    public Exemplaire(Integer idExemplaire, Livre livre) {
+
+    public Exemplaire() {
+    }
+
+    public Exemplaire(Integer idExemplaire, Livre livre, boolean dispo) {
         this.idExemplaire = idExemplaire;
         this.livre = livre;
+        this.dispo = dispo;
     }
-    
+
     // Getters et Setters
     public Integer getIdExemplaire() {
         return idExemplaire;
@@ -44,5 +49,13 @@ public class Exemplaire {
     
     public void setLivre(Livre livre) {
         this.livre = livre;
+    }
+
+    public boolean isDispo() {
+        return dispo;
+    }
+
+    public void setDispo(boolean dispo) {
+        this.dispo = dispo;
     }
 }
