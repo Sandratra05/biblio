@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import com.springjpa.entity.Adherant;
+import com.springjpa.entity.Inscription;
 import com.springjpa.entity.Profil;
 import com.springjpa.repository.AdherantRepository;
 import com.springjpa.repository.InscriptionRepository;
@@ -42,8 +43,9 @@ public class AdherantService {
     
         var adherant = adherantOpt.get();
         // Récupérer la dernière inscription active
-        var inscriptionOpt = inscriptionRepository.findTopByAdherantIdAdherantAndEtatOrderByDateInscriptionDesc(adherantId, true).get();
-        if (inscriptionOpt == null) return false;
+        var inscriptionOpt = inscriptionRepository.findTopByAdherantIdAdherantAndEtatOrderByDateInscriptionDesc(adherantId, true);
+        if (inscriptionOpt.isEmpty()) return false;
+        Inscription inscription = inscriptionOpt.get();
 
         // Verifier la duree de l'inscription pour le profil
         Profil profil = adherant.getProfil();
@@ -52,7 +54,7 @@ public class AdherantService {
         int duree = inscriptionProfil.getDuree(); 
 
         // Calcul de la date limite
-        var dateLimite = inscriptionOpt.getDateInscription().plusDays(duree);
+        var dateLimite = inscription.getDateInscription().plusDays(duree);
         return dateLimite.isAfter(java.time.LocalDateTime.now());
     }
 

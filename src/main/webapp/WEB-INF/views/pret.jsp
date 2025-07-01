@@ -8,7 +8,7 @@
 </head>
 <body>
     <h1>Prêter un Livre</h1>
-    <form action="/preter" method="post">
+    <form action="preter" method="post">
         <label for="adherantId">ID de l'adh&eacute;rant :</label>
         <input list="adherant-list" id="adherantId" name="adherantId" required autocomplete="off">
         <datalist id="adherant-list">
@@ -16,6 +16,12 @@
                 <option value="${ad.idAdherant}">${ad.nomAdherant} ${ad.prenomAdherant}</option>
             </c:forEach>
         </datalist>
+        <br><br>
+        <select name="typePret" id="typePret">
+            <c:forEach var="type" items="${typesPret}">
+                <option value="${type.idTypePret}">${type.type}</option>
+            </c:forEach>
+        </select>
         <br><br>
         <label for="exemplaires">S&eacute;lectionnez les exemplaires à preter :</label>
         <select id="exemplaires" name="exemplaires" multiple size="5" required>
@@ -31,5 +37,10 @@
         <br><br>
         <button type="submit">Valider le pret</button>
     </form>
+    <c:if test="${not empty message}">
+    <div style="color: red; font-weight: bold;">
+        ${message}
+    </div>
+</c:if>
 </body>
 </html>

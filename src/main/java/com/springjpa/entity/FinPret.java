@@ -10,11 +10,15 @@ import jakarta.persistence.Table;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+
 @Entity
 @Table(name = "fin_pret")
 public class FinPret {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_fin_pret")
     private Integer idFinPret;
     
@@ -22,7 +26,7 @@ public class FinPret {
     private LocalDateTime dateFin;
     
     @ManyToOne
-    @JoinColumn(name = "id_pret", nullable = false)
+    @JoinColumn(name = "id_pret")
     private Pret pret;
     
     // Constructeurs

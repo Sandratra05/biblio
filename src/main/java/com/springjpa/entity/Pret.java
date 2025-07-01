@@ -7,6 +7,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 
 import java.time.LocalDateTime;
 
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
 public class Pret {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_pret")
     private Integer idPret;
     
@@ -40,7 +43,7 @@ public class Pret {
     // Constructeurs
     public Pret() {}
     
-    public Pret(Integer idPret, LocalDateTime dateDebut, Admin admin, 
+    public Pret(Integer idPret , LocalDateTime dateDebut, Admin admin, 
                 TypePret typePret, Exemplaire exemplaire, Adherant adherant) {
         this.idPret = idPret;
         this.dateDebut = dateDebut;
@@ -50,6 +53,16 @@ public class Pret {
         this.adherant = adherant;
     }
     
+    
+
+    public Pret(LocalDateTime dateDebut, Admin admin, TypePret typePret, Exemplaire exemplaire, Adherant adherant) {
+        this.dateDebut = dateDebut;
+        this.admin = admin;
+        this.typePret = typePret;
+        this.exemplaire = exemplaire;
+        this.adherant = adherant;
+    }
+
     // Getters et Setters
     public Integer getIdPret() {
         return idPret;
@@ -98,4 +111,6 @@ public class Pret {
     public void setAdherant(Adherant adherant) {
         this.adherant = adherant;
     }
+
+    
 }

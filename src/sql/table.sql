@@ -1,3 +1,29 @@
+DROP TABLE IF EXISTS fin_pret;
+DROP TABLE IF EXISTS reservation;
+DROP TABLE IF EXISTS pret;
+DROP TABLE IF EXISTS penalite;
+DROP TABLE IF EXISTS inscription;
+DROP TABLE IF EXISTS exemplaire;
+DROP TABLE IF EXISTS categorie_livre;
+DROP TABLE IF EXISTS quota_type_pret;
+DROP TABLE IF EXISTS inscription_profil;
+DROP TABLE IF EXISTS duree_pret;
+DROP TABLE IF EXISTS adherant;
+DROP TABLE IF EXISTS livre;
+DROP TABLE IF EXISTS statut_reservation;
+DROP TABLE IF EXISTS type_pret;
+DROP TABLE IF EXISTS admin;
+DROP TABLE IF EXISTS profil;
+DROP TABLE IF EXISTS categorie;
+DROP TABLE IF EXISTS editeur;
+DROP TABLE IF EXISTS auteur;
+
+DROP DATABASE biblio;
+
+CREATE DATABASE biblio;
+
+use biblio;
+
 CREATE TABLE auteur(
    id_auteur INT,
    nom_auteur VARCHAR(50) NOT NULL,

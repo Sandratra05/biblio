@@ -6,6 +6,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 
 
 
@@ -14,6 +16,7 @@ import jakarta.persistence.Table;
 public class Exemplaire {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_exemplaire")
     private Integer idExemplaire;
     
@@ -22,13 +25,13 @@ public class Exemplaire {
     private Livre livre;
 
     @Column(name = "dispo")
-    private boolean dispo;
+    private int dispo;
     
 
     public Exemplaire() {
     }
 
-    public Exemplaire(Integer idExemplaire, Livre livre, boolean dispo) {
+    public Exemplaire(Integer idExemplaire, Livre livre, int dispo) {
         this.idExemplaire = idExemplaire;
         this.livre = livre;
         this.dispo = dispo;
@@ -51,11 +54,11 @@ public class Exemplaire {
         this.livre = livre;
     }
 
-    public boolean isDispo() {
+    public int isDispo() {
         return dispo;
     }
 
-    public void setDispo(boolean dispo) {
+    public void setDispo(int dispo) {
         this.dispo = dispo;
     }
 }
