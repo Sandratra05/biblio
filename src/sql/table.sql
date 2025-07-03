@@ -18,13 +18,13 @@ CREATE TABLE editeur(
 
 CREATE TABLE categorie(
    id_categorie INT,
-   nom_categorie INT NOT NULL,
+   nom_categorie VARCHAR(50) NOT NULL,
    PRIMARY KEY(id_categorie)
 );
 
 CREATE TABLE profil(
    id_profil INT,
-   nom_profil INT NOT NULL,
+   nom_profil VARCHAR(50) NOT NULL,
    quota_pret INT,
    quota_reservation INT,
    PRIMARY KEY(id_profil)
