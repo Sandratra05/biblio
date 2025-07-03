@@ -42,6 +42,11 @@ public class FinPret {
     public Integer getIdFinPret() {
         return idFinPret;
     }
+
+    public FinPret (LocalDateTime dateFin, Pret pret){
+        this.dateFin = dateFin;
+        this.pret = pret;
+    }
     
     public void setIdFinPret(Integer idFinPret) {
         this.idFinPret = idFinPret;
