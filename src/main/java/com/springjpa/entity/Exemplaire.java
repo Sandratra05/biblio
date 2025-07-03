@@ -24,17 +24,13 @@ public class Exemplaire {
     @JoinColumn(name = "id_livre", nullable = false)
     private Livre livre;
 
-    @Column(name = "dispo")
-    private int dispo;
-    
 
     public Exemplaire() {
     }
 
-    public Exemplaire(Integer idExemplaire, Livre livre, int dispo) {
-        this.idExemplaire = idExemplaire;
-        this.livre = livre;
-        this.dispo = dispo;
+    public Exemplaire(Integer idExemplaire, Livre livre) {
+        setIdExemplaire(idExemplaire);
+        setLivre(livre);
     }
 
     // Getters et Setters
@@ -54,11 +50,5 @@ public class Exemplaire {
         this.livre = livre;
     }
 
-    public int isDispo() {
-        return dispo;
-    }
 
-    public void setDispo(int dispo) {
-        this.dispo = dispo;
-    }
 }

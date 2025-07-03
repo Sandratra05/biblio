@@ -31,6 +31,22 @@ public class Penalite {
     @JoinColumn(name = "id_adherant", nullable = false)
     private Adherant adherant;
 
+    // Constructeurs
+    public Penalite() {}
+
+    public Penalite(Adherant adherant, Integer duree, LocalDateTime datePenalite) {
+        this.adherant = adherant;
+        this.duree = duree;
+        this.datePenalite = datePenalite;
+    }
+    
+    public Penalite(Integer idPenalite, Adherant adherant, Integer duree, LocalDateTime datePenalite) {
+        this.idPenalite = idPenalite;
+        this.adherant = adherant;
+        this.duree = duree;
+        this.datePenalite = datePenalite;
+    }
+
     // Getters et setters
 
     public Integer getIdPenalite() {

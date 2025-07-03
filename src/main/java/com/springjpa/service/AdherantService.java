@@ -1,6 +1,8 @@
 package com.springjpa.service;
 
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +23,6 @@ public class AdherantService {
     @Autowired
     private ProfilService profilService;
 
-    @Autowired
-    private PenaliteService penaliteService;
-
 
     public Adherant findById(Integer id){
         return adherantRepository.findById(id).get();
@@ -37,28 +36,14 @@ public class AdherantService {
         adherantRepository.save(adherant);
     }
 
-    public boolean isInscri(Integer adherantId) {
-        var adherantOpt = adherantRepository.findById(adherantId);
-        if (adherantOpt.isEmpty()) return false;
-    
-        var adherant = adherantOpt.get();
-        // Récupérer la dernière inscription active
-        var inscriptionOpt = inscriptionRepository.findTopByAdherantIdAdherantAndEtatOrderByDateInscriptionDesc(adherantId, true);
-        if (inscriptionOpt.isEmpty()) return false;
-        Inscription inscription = inscriptionOpt.get();
-
-        // Verifier la duree de l'inscription pour le profil
-        Profil profil = adherant.getProfil();
-        var inscriptionProfil = profilService.getInscriptionProfilByProfil(profil);
-        if (inscriptionProfil == null) return false;
-        int duree = inscriptionProfil.getDuree(); 
-
-        // Calcul de la date limite
-        var dateLimite = inscription.getDateInscription().plusDays(duree);
-        return dateLimite.isAfter(java.time.LocalDateTime.now());
+    public boolean isActif(Integer adherantId, LocalDateTime datePret) {
+        Inscription inscription = inscriptionRepository.findLastByAdherantId(adherantId);
+        if (datePret.isAfter(inscription.getDateDebut()) && datePret.isBefore(inscription.getDateFin())) {
+            return true;
+        }
+        
+        return false;
     }
 
-    public boolean isPenalise(Integer adherantId) {
-        return penaliteService.isPenalise(adherantId);
-    }
+
 }

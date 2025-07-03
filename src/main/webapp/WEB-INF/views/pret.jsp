@@ -23,18 +23,17 @@
             </c:forEach>
         </select>
         <br><br>
-        <label for="exemplaires">S&eacute;lectionnez les exemplaires à preter :</label>
-        <select id="exemplaires" name="exemplaires" multiple size="5" required>
-            <c:forEach var="ex" items="${exemplaires}">
-                <option value="${ex.idExemplaire}">
-                    Exemplaire ${ex.idExemplaire}
-                    <c:if test="${not empty ex.livre}">
-                        - Livre: ${ex.livre.titre}
-                    </c:if>
+        <label for="livre">S&eacute;lectionnez le livre à preter :</label>
+        <select id="livre" name="livre" required>
+            <c:forEach var="livre" items="${livres}">
+                <option value="${livre.idLivre}">
+                    Livre: ${livre.titre}
                 </option>
             </c:forEach>
         </select>
         <br><br>
+        <label for="dateFin">Date de fin du pret</label>
+        <input type="date" name="dateFin" id="dateFin" required>
         <button type="submit">Valider le pret</button>
     </form>
     <c:if test="${not empty message}">

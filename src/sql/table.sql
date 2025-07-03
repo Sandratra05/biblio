@@ -1,28 +1,6 @@
-DROP TABLE IF EXISTS fin_pret;
-DROP TABLE IF EXISTS reservation;
-DROP TABLE IF EXISTS pret;
-DROP TABLE IF EXISTS penalite;
-DROP TABLE IF EXISTS inscription;
-DROP TABLE IF EXISTS exemplaire;
-DROP TABLE IF EXISTS categorie_livre;
-DROP TABLE IF EXISTS quota_type_pret;
-DROP TABLE IF EXISTS inscription_profil;
-DROP TABLE IF EXISTS duree_pret;
-DROP TABLE IF EXISTS adherant;
-DROP TABLE IF EXISTS livre;
-DROP TABLE IF EXISTS statut_reservation;
-DROP TABLE IF EXISTS type_pret;
-DROP TABLE IF EXISTS admin;
-DROP TABLE IF EXISTS profil;
-DROP TABLE IF EXISTS categorie;
-DROP TABLE IF EXISTS editeur;
-DROP TABLE IF EXISTS auteur;
-
-DROP DATABASE biblio;
-
+DROP DATABASE IF EXISTS biblio;
 CREATE DATABASE biblio;
-
-use biblio;
+USE biblio;
 
 CREATE TABLE auteur(
    id_auteur INT,
@@ -74,18 +52,10 @@ CREATE TABLE duree_pret(
    FOREIGN KEY(id_profil) REFERENCES profil(id_profil)
 );
 
-CREATE TABLE inscription_profil(
-   id_inscri_profil INT,
-   duree INT,
-   id_profil INT NOT NULL,
-   PRIMARY KEY(id_inscri_profil),
-   FOREIGN KEY(id_profil) REFERENCES profil(id_profil)
-);
-
 CREATE TABLE statut_reservation(
-   id_statut INT,
+   id_statut_reservation COUNTER,
    nom_statut VARCHAR(50),
-   PRIMARY KEY(id_statut)
+   PRIMARY KEY(id_statut_reservation)
 );
 
 CREATE TABLE livre(
@@ -96,6 +66,7 @@ CREATE TABLE livre(
    annee_publication INT,
    synopsis VARCHAR(1000),
    nb_page INT,
+   age_requis INT,
    id_editeur INT NOT NULL,
    id_auteur INT NOT NULL,
    PRIMARY KEY(id_livre),
@@ -108,6 +79,7 @@ CREATE TABLE adherant(
    nom_adherant VARCHAR(50),
    prenom_adherant VARCHAR(50),
    password VARCHAR(50),
+   date_naissance DATE,
    id_profil INT NOT NULL,
    PRIMARY KEY(id_adherant),
    FOREIGN KEY(id_profil) REFERENCES profil(id_profil)
@@ -115,8 +87,8 @@ CREATE TABLE adherant(
 
 CREATE TABLE inscription(
    id_inscription INT,
-   date_inscription DATETIME,
-   etat LOGICAL,
+   date_debut DATETIME,
+   date_fin DATETIME,
    id_adherant INT NOT NULL,
    PRIMARY KEY(id_inscription),
    FOREIGN KEY(id_adherant) REFERENCES adherant(id_adherant)
@@ -133,7 +105,6 @@ CREATE TABLE penalite(
 
 CREATE TABLE exemplaire(
    id_exemplaire INT,
-   dispo LOGICAL,
    id_livre INT NOT NULL,
    PRIMARY KEY(id_exemplaire),
    FOREIGN KEY(id_livre) REFERENCES livre(id_livre)
@@ -157,12 +128,10 @@ CREATE TABLE reservation(
    id_reservation INT,
    date_de_reservation DATETIME,
    id_admin INT NOT NULL,
-   id_statut INT NOT NULL,
    id_exemplaire INT NOT NULL,
    id_adherant INT NOT NULL,
    PRIMARY KEY(id_reservation),
    FOREIGN KEY(id_admin) REFERENCES admin(id_admin),
-   FOREIGN KEY(id_statut) REFERENCES statut_reservation(id_statut),
    FOREIGN KEY(id_exemplaire) REFERENCES exemplaire(id_exemplaire),
    FOREIGN KEY(id_adherant) REFERENCES adherant(id_adherant)
 );
@@ -172,6 +141,14 @@ CREATE TABLE fin_pret(
    date_fin DATETIME,
    id_pret INT NOT NULL,
    PRIMARY KEY(id_fin_pret),
+   FOREIGN KEY(id_pret) REFERENCES pret(id_pret)
+);
+
+CREATE TABLE retour(
+   id_retour INT,
+   date_retour DATETIME,
+   id_pret INT NOT NULL,
+   PRIMARY KEY(id_retour),
    FOREIGN KEY(id_pret) REFERENCES pret(id_pret)
 );
 
@@ -190,4 +167,20 @@ CREATE TABLE quota_type_pret(
    PRIMARY KEY(id_profil, id_type_pret),
    FOREIGN KEY(id_profil) REFERENCES profil(id_profil),
    FOREIGN KEY(id_type_pret) REFERENCES type_pret(id_type_pret)
+);
+
+CREATE TABLE reservation_statut(
+   id_reservation INT,
+   id_statut_reservation INT,
+   PRIMARY KEY(id_reservation, id_statut_reservation),
+   FOREIGN KEY(id_reservation) REFERENCES reservation(id_reservation),
+   FOREIGN KEY(id_statut_reservation) REFERENCES statut_reservation(id_statut_reservation)
+);
+
+CREATE TABLE restriction_categorie(
+   id_categorie INT,
+   id_profil INT,
+   PRIMARY KEY(id_categorie, id_profil),
+   FOREIGN KEY(id_categorie) REFERENCES categorie(id_categorie),
+   FOREIGN KEY(id_profil) REFERENCES profil(id_profil)
 );

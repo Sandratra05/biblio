@@ -14,7 +14,7 @@ public class StatutReservation {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_statut")
+    @Column(name = "id_statut_reservation")
     private Integer idStatut;
     
     @Column(name = "nom_statut", length = 50)
