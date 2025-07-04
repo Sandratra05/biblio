@@ -45,5 +45,12 @@ public class AdherantService {
         return false;
     }
 
+    public Adherant authenticate(int idAdherant, String motDePasse) {
+        Adherant adherant = adherantRepository.findById(idAdherant).get();
+        if (adherant != null && adherant.getPassword().equals(motDePasse)) {
+            return adherant;
+        }
+        return null;
+    }
 
 }
