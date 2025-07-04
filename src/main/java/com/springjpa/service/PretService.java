@@ -37,8 +37,8 @@ public class PretService {
         return pretRepository.findByIdExemplaire(id_exemplaire);
     }
 
-        public FinPret findFinPret(Pret pret){
-        return pretRepository.findByIdPret(pret.getIdPret());
+    public FinPret findFinPret(Pret pret){
+        return pretRepository.findFirstByPretIdOrderByDateFinDesc(pret.getIdPret());
     }
 
     public Retour findRetourPret(Pret pret){
