@@ -19,6 +19,9 @@ public class ExemplaireService {
     @Autowired
     private ExemplaireRepository exemplaireRepository;
 
+    @Autowired
+    private ProlongementService prolongementService;
+
     @Autowired 
     private PretService pretService;
 
@@ -37,9 +40,21 @@ public class ExemplaireService {
 
     public Boolean isExemplaireDisponible(Integer id_exemplaire, LocalDateTime dateDebut, LocalDateTime dateFin) {
 
+        // Vérifie s'il y a un prolongement actif
+        if (prolongementService.isExemplaireEnProlongementActif(id_exemplaire)) {
+            return false;
+        }
+
         List<Pret> prets = pretService.findByIdExemplaire(id_exemplaire);
-    
+
+        // if (prets.size() > 0) {
+        //     return false;
+        // }
+  
+        // return true;
+
         for (Pret pret : prets) {
+ 
             LocalDateTime dateDebutPret = pret.getDateDebut();
             LocalDateTime dateFinPretOuRetour = null;
     
@@ -53,7 +68,7 @@ public class ExemplaireService {
                 }
             }
     
-            if (dateFinPretOuRetour == null) continue;
+            if (dateFinPretOuRetour == null) return false;
     
             if (PretService.datesSeChevauchent(dateDebut, dateFin, dateDebutPret, dateFinPretOuRetour)) {
                 return false;

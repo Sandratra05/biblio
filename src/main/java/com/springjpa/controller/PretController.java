@@ -3,11 +3,13 @@ package com.springjpa.controller;
 import com.oracle.wls.shaded.org.apache.xpath.operations.Bool;
 import com.springjpa.entity.Adherant;
 import com.springjpa.entity.Exemplaire;
+import com.springjpa.entity.FinPret;
 import com.springjpa.entity.Livre;
 import com.springjpa.entity.Pret;
 import com.springjpa.service.AdherantService;
 import com.springjpa.service.AdminService;
 import com.springjpa.service.ExemplaireService;
+import com.springjpa.service.FinPretService;
 import com.springjpa.service.LivreService;
 import com.springjpa.service.PenaliteService;
 import com.springjpa.service.PretService;
@@ -53,18 +55,14 @@ public class PretController {
     @Autowired
     private PenaliteService penaliteService;
 
-
-    @GetMapping("/")
-    public String index() {
-        return "index"; // Redirection vers la page d'accueil
-    }
+    @Autowired
+    private FinPretService finPretService;
 
     private void preparePretPage(Model model) {
         model.addAttribute("livres", livreService.findAll());
         model.addAttribute("adherants", adherantService.findAll());
         model.addAttribute("typesPret", typePretService.findAll());
     }
-
 
     @GetMapping("/preter")
     public String preter(Model model) {
@@ -115,11 +113,16 @@ public class PretController {
 
             // 4. L'exemplaire doit être disponible (pas déjà prêté)
             Boolean disponible = exemplaireService.isExemplaireDisponible(exemplaire.getIdExemplaire(), LocalDateTime.now(), UtilService.toDateTimeWithCurrentTime(dateFin));
-            if (!disponible) {
-                model.addAttribute("message", "Exemplaire n°" + exemplaire.getIdExemplaire() + " non disponible.");
-                preparePretPage(model);
-                return "pret";
+            if (disponible) {
+                break;
+            } else {
+                continue;
             }
+        }
+        if (exemplaireOpt == null) {
+            model.addAttribute("message", "Il n'y a plus d'exemplaire disponible.");
+            preparePretPage(model);
+            return "pret";
         }
 
         // 5. Vérifier si l'adhérant n'est pas pénalisé
@@ -139,7 +142,7 @@ public class PretController {
         ); 
 
         if (depasseQuota) {
-            model.addAttribute("message", "Quota de prêt dépassé." + depasseQuota);
+            model.addAttribute("message", "Quota de prêt dépassé.");
             preparePretPage(model);
             
             return "pret";
@@ -162,11 +165,13 @@ public class PretController {
             exemplaireOpt, // Exemplaire (le dernier exemplaire vérifié)
             adherant // Adhérant
         );
-        
 
+        FinPret finPret = new FinPret(UtilService.toDateTimeWithCurrentTime(dateFin), pret);
+        
         if (exemplaireOpt != null) {
             pretService.save(pret);
-            model.addAttribute("message", "Prêt validé et inséré");
+            finPretService.save(finPret);
+            model.addAttribute("success", "Prêt validé et inséré");
         }
 
         preparePretPage(model);

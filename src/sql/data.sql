@@ -23,8 +23,13 @@ INSERT INTO duree_pret (id_duree_pret, duree, id_profil) VALUES (1, 15, 1);
 INSERT INTO duree_pret (id_duree_pret, duree, id_profil) VALUES (2, 30, 2);
 
 -- STATUT_RESERVATION
-INSERT INTO statut_reservation (id_statut, nom_statut) VALUES (1, 'En attente');
-INSERT INTO statut_reservation (id_statut, nom_statut) VALUES (2, 'Validée');
+INSERT INTO statut_reservation (nom_statut) VALUES ('En attente');
+INSERT INTO statut_reservation (nom_statut) VALUES ('Validée');
+
+-- statut_prolongement
+INSERT INTO statut_prolongement (nom_statut) VALUES ('En attente');
+INSERT INTO statut_prolongement (nom_statut) VALUES ('En cours');
+INSERT INTO statut_prolongement (nom_statut) VALUES ('Termine');
 
 -- AUTEUR
 INSERT INTO auteur (id_auteur, nom_auteur, prenom_auteur) VALUES (1, 'Hugo', 'Victor');
@@ -57,6 +62,7 @@ VALUES (2, '2025-07-01 00:00:00', '2025-07-31 23:59:59', 2);
 
 -- PENALITE
 INSERT INTO penalite (id_penalite, duree, date_penalite, id_adherant) VALUES (1, 7, '2024-06-01 09:00:00', 2);
+INSERT INTO penalite (duree, date_penalite, id_adherant) VALUES (7, '2025-07-03 09:00:00', 2);
 
 -- EXEMPLAIRE
 INSERT INTO exemplaire (id_exemplaire, id_livre) VALUES (1, 1);

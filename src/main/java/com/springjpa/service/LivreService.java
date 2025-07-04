@@ -48,7 +48,7 @@ public class LivreService {
         for (Categorie categorie : livre.getCategories()) {
             int restreint = restrictionCategorieRepository.existsRestriction(
                 categorie.getIdCategorie(), adherant.getProfil().getIdProfil());
-            if (restreint == 0) {
+            if (restreint > 0) {
                 return false;
             }
         }

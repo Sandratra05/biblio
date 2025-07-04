@@ -11,10 +11,12 @@ import com.springjpa.entity.DureePret;
 import com.springjpa.entity.FinPret;
 import com.springjpa.entity.Pret;
 import com.springjpa.entity.Profil;
+import com.springjpa.entity.Prolongement;
 import com.springjpa.entity.Reservation;
 import com.springjpa.repository.DureePretRepository;
 import com.springjpa.repository.FinPretRepository;
 import com.springjpa.repository.PretRepository;
+import com.springjpa.repository.ProlongementRepository;
 import com.springjpa.repository.ReservationRepository;
 
 @Service
@@ -31,6 +33,14 @@ public class ProlongementService {
     
     @Autowired
     FinPretRepository finPretRepository;
+    
+    @Autowired
+    private ProlongementRepository prolongementRepository;
+
+    public boolean isExemplaireEnProlongementActif(Integer idExemplaire) {
+        List<Prolongement> prolongements = prolongementRepository.findProlongementsEnCoursByExemplaire(idExemplaire);
+        return !prolongements.isEmpty();
+    }
 
     public void prolongerPret(Integer idPret, LocalDateTime dateTime) throws Exception{
         Pret currentPret = pretRepository.findById(idPret).orElse(null);
@@ -56,8 +66,9 @@ public class ProlongementService {
             }
             FinPret newFin = new FinPret(dateTime, currentPret);
             finPretRepository.save(newFin);
-        } else {
-            throw new Exception("Pret non trouver idPret : "+idPret);
-        }
+        } 
+        // else {
+        //     throw new Exception("Pret non trouver idPret : "+idPret);
+        // }
     }
 }

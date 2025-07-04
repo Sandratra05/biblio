@@ -35,6 +35,12 @@ INSERT INTO statut_reservation (id_statut_reservation, nom_statut) VALUES (1, 'E
 INSERT INTO statut_reservation (id_statut_reservation, nom_statut) VALUES (2, 'Validée');
 INSERT INTO statut_reservation (id_statut_reservation, nom_statut) VALUES (3, 'Annulée');
 
+
+INSERT INTO statut_prolongement (nom_statut) VALUES ('En attente');
+INSERT INTO statut_prolongement (nom_statut) VALUES ('En cours');
+INSERT INTO statut_prolongement (nom_statut) VALUES ('Annule');
+INSERT INTO statut_prolongement (nom_statut) VALUES ('Termine');
+
 -- LIVRE (5 livres)
 INSERT INTO livre (id_livre, titre, isbn, langue, annee_publication, synopsis, nb_page, age_requis, id_editeur, id_auteur)
 VALUES (1, 'Les Miserables', '9781234567890', 'Français', 1862, 'Roman historique', 1200, 12, 1, 1);
@@ -97,3 +103,14 @@ INSERT INTO quota_type_pret (id_profil, id_type_pret, quota) VALUES (2, 1, 2);
 
 -- RESTRICTION_CATEGORIE (aucune restriction pour l'exemple)
 -- (si tu veux tester des restrictions, ajoute des lignes ici)
+
+SELECT COUNT(*) FROM pret p WHERE p.id_adherant = 4 AND p.id_type_pret = 1 AND p.id_pret NOT IN (SELECT r.id_pret FROM retour r);
+SELECT * FROM pret p WHERE p.id_exemplaire = 3;
+
+
+-- Tu peux faire cette requête SQL pour voir quels exemplaires sont en cours :
+SELECT p.*
+FROM pret p
+LEFT JOIN retour r ON p.id_pret = r.id_pret
+LEFT JOIN fin_pret f ON p.id_pret = f.id_pret
+WHERE r.id_retour IS NULL AND f.id_fin_pret IS NULL;
