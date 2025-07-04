@@ -62,4 +62,9 @@ public class AdherantController {
     public String adherantHome() {
         return "adherant";
     }
+
+    @GetMapping("/dashboard")
+    public String dashboardAdmin() {
+        return "dashboard";
+    }
 }

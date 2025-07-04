@@ -107,7 +107,7 @@
         <input type="date" name="dateFin" id="dateFin" required>
         <button type="submit">Valider le pr&ecirc;t</button>
     </form>
-    <a href="home"><button type="button">Retour</button></a>
+    <a href="dashboard"><button type="button">Retour</button></a>
     <c:if test="${not empty message}">
         <div class="message">
             ${message}
