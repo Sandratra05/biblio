@@ -23,8 +23,13 @@ INSERT INTO duree_pret (id_duree_pret, duree, id_profil) VALUES (1, 15, 1);
 INSERT INTO duree_pret (id_duree_pret, duree, id_profil) VALUES (2, 30, 2);
 
 -- STATUT_RESERVATION
-INSERT INTO statut_reservation (id_statut, nom_statut) VALUES (1, 'En attente');
-INSERT INTO statut_reservation (id_statut, nom_statut) VALUES (2, 'Validée');
+INSERT INTO statut_reservation (nom_statut) VALUES ('En attente');
+INSERT INTO statut_reservation (nom_statut) VALUES ('Validée');
+
+-- statut_prolongement
+INSERT INTO statut_prolongement (nom_statut) VALUES ('En attente');
+INSERT INTO statut_prolongement (nom_statut) VALUES ('En cours');
+INSERT INTO statut_prolongement (nom_statut) VALUES ('Termine');
 
 -- AUTEUR
 INSERT INTO auteur (id_auteur, nom_auteur, prenom_auteur) VALUES (1, 'Hugo', 'Victor');

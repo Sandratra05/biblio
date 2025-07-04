@@ -1,7 +1,3 @@
-DROP DATABASE IF EXISTS biblio;
-CREATE DATABASE biblio;
-USE biblio;
-
 CREATE TABLE auteur(
    id_auteur INT,
    nom_auteur VARCHAR(50) NOT NULL,
@@ -56,6 +52,12 @@ CREATE TABLE statut_reservation(
    id_statut_reservation COUNTER,
    nom_statut VARCHAR(50),
    PRIMARY KEY(id_statut_reservation)
+);
+
+CREATE TABLE statut_prolongement(
+   id_statut_prolongement COUNTER,
+   nom_statut VARCHAR(50),
+   PRIMARY KEY(id_statut_prolongement)
 );
 
 CREATE TABLE livre(
@@ -152,6 +154,14 @@ CREATE TABLE retour(
    FOREIGN KEY(id_pret) REFERENCES pret(id_pret)
 );
 
+CREATE TABLE prolongement(
+   id_prolongement COUNTER,
+   date_fin DATETIME,
+   id_pret INT NOT NULL,
+   PRIMARY KEY(id_prolongement),
+   FOREIGN KEY(id_pret) REFERENCES pret(id_pret)
+);
+
 CREATE TABLE categorie_livre(
    id_livre INT,
    id_categorie INT,
@@ -183,4 +193,12 @@ CREATE TABLE restriction_categorie(
    PRIMARY KEY(id_categorie, id_profil),
    FOREIGN KEY(id_categorie) REFERENCES categorie(id_categorie),
    FOREIGN KEY(id_profil) REFERENCES profil(id_profil)
+);
+
+CREATE TABLE prolongement_statut(
+   id_prolongement INT,
+   id_statut_prolongement INT,
+   PRIMARY KEY(id_prolongement, id_statut_prolongement),
+   FOREIGN KEY(id_prolongement) REFERENCES prolongement(id_prolongement),
+   FOREIGN KEY(id_statut_prolongement) REFERENCES statut_prolongement(id_statut_prolongement)
 );
