@@ -62,6 +62,7 @@ VALUES (2, '2025-07-01 00:00:00', '2025-07-31 23:59:59', 2);
 
 -- PENALITE
 INSERT INTO penalite (id_penalite, duree, date_penalite, id_adherant) VALUES (1, 7, '2024-06-01 09:00:00', 2);
+INSERT INTO penalite (duree, date_penalite, id_adherant) VALUES (7, '2025-07-03 09:00:00', 2);
 
 -- EXEMPLAIRE
 INSERT INTO exemplaire (id_exemplaire, id_livre) VALUES (1, 1);

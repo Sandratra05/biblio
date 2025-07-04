@@ -34,6 +34,7 @@ public class LivreController {
 
         return "list-livre"; // Redirection vers la page des livres
     }
+    
     @GetMapping("/detail")
     public String detailLivre(Model model, Integer id) {
         Livre livre = livreService.findById(id);

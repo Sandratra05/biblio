@@ -25,4 +25,25 @@ public interface PretRepository extends JpaRepository<Pret, Integer> {
     @Query(value = "SELECT * FROM pret p WHERE p.id_exemplaire = :idExemplaire", nativeQuery = true)
     List<Pret> findByIdExemplaire(@Param("idExemplaire") Integer id_exemplaire);
     
+    @Query(value = "SELECT * FROM pret p WHERE p.id_adherant = :idAdherant", nativeQuery = true)
+    List<Pret> findPretByIdAdherant(@Param("idAdherant") Integer idAdherant);
+
+    @Query(value = """
+        SELECT p.*
+        FROM pret p
+        WHERE p.id_adherant = :idAdherant
+        AND p.id_pret NOT IN (SELECT r.id_pret FROM retour r)
+        AND (
+                NOT EXISTS (
+                    SELECT 1 FROM fin_pret f
+                    WHERE f.id_pret = p.id_pret AND f.date_fin <= NOW()
+                )
+            )
+        AND EXISTS (
+                SELECT 1 FROM prolongement pr
+                WHERE pr.id_pret = p.id_pret
+            )
+    """, nativeQuery = true)
+    List<Pret> findPretsEnCoursAvecProlongement(@Param("idAdherant") Integer idAdherant);
+
 }

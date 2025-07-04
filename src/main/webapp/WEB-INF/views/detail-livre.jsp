@@ -160,7 +160,7 @@
                     </form>
                 </div>
                 <div class="boutons">
-                    <a href="<c:url value='/livre'/>" class="retour-btn">Retour à la liste</a>
+                    <a href="${pageContext.request.contextPath}/livre/" class="retour-btn">Retour à la liste</a>
                 </div>
             </div>
         </div>

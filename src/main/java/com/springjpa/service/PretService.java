@@ -50,4 +50,13 @@ public class PretService {
         return !fin1.isBefore(debut2) && !fin2.isBefore(debut1);
     }
 
+    public List<Pret> findPretByIdAdherant(Integer idAdherant) {
+        return pretRepository.findPretByIdAdherant(idAdherant);
+    }
+
+    public List<Pret> findPretsEnCoursAvecProlongement(Integer idAdherant) {
+        return pretRepository.findPretsEnCoursAvecProlongement(idAdherant);
+    }
+
+
 }

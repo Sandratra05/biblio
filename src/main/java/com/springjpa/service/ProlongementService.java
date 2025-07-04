@@ -66,8 +66,9 @@ public class ProlongementService {
             }
             FinPret newFin = new FinPret(dateTime, currentPret);
             finPretRepository.save(newFin);
-        } else {
-            throw new Exception("Pret non trouver idPret : "+idPret);
-        }
+        } 
+        // else {
+        //     throw new Exception("Pret non trouver idPret : "+idPret);
+        // }
     }
 }

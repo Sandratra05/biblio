@@ -64,11 +64,19 @@
 </head>
 <body>
     <div class="login">
-        <form action="login" method="POST">
+        <form action="auth" method="POST">
             <fieldset>
                 <h1>Connexion</h1>
 
-                <label for="nom">Numéro adhérant :</label>
+                <label for="typeLogin">Connexion en tant que :</label>
+                <select id="typeLogin" name="typeLogin">
+                    <option value="">--Choisir un profil--</option>
+                    <!-- Ajouter dynamiquement les options des livres -->
+                    <option value="1">Admin</option>
+                    <option value="2">Adherant</option>
+                </select>
+
+                <label for="nom">Num&eacute;ro matricule:</label>
                 <input type="text" name="numeroAdherant" id="nom" placeholder="Ex: 1">
 
                 <label for="mdp">Mot de passe :</label>
