@@ -29,6 +29,11 @@ public class PretService {
         return pretRepository.findAll();
     }
 
+    public List<Pret> findAllEnCoursWithDetails() {
+        return pretRepository.findAllEnCoursWithDetails();
+    }
+
+
     public void save(Pret pret){
         pretRepository.save(pret);
     }

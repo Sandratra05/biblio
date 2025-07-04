@@ -46,4 +46,16 @@ public interface PretRepository extends JpaRepository<Pret, Integer> {
     """, nativeQuery = true)
     List<Pret> findPretsEnCoursAvecProlongement(@Param("idAdherant") Integer idAdherant);
 
+    @Query("""
+        SELECT p
+        FROM Pret p
+        JOIN FETCH p.exemplaire e
+        JOIN FETCH e.livre
+        JOIN FETCH p.adherant
+        WHERE p.idPret NOT IN (
+            SELECT r.pret.idPret FROM Retour r
+        )
+    """)
+    List<Pret> findAllEnCoursWithDetails();
+
 }

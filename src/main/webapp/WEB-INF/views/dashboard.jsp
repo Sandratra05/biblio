@@ -7,7 +7,8 @@
 </head>
 <body>
     <h1>Que voulez-vous faire ?</h1>
-    <a href="${pageContext.request.contextPath}/preter">Prêter un Livre</a>
+    <a href="${pageContext.request.contextPath}/preter">Pr&ecirc;ter un Livre</a>
+    <a href="${pageContext.request.contextPath}/retour">Retourner un Livre</a>
     <a href="${pageContext.request.contextPath}/reservation">Reserver un Livre</a>
     <a href="${pageContext.request.contextPath}/deco">Se deconnecter</a>
 </body>
