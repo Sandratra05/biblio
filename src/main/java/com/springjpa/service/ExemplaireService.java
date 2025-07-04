@@ -13,30 +13,35 @@ import com.springjpa.entity.Retour;
 import com.springjpa.repository.ExemplaireRepository;
 import com.springjpa.repository.PretRepository;
 
+import ch.qos.logback.classic.pattern.Util;
+
 @Service
 public class ExemplaireService {
-    
+
     @Autowired
     private ExemplaireRepository exemplaireRepository;
 
     @Autowired
     private ProlongementService prolongementService;
 
-    @Autowired 
+    @Autowired
     private PretService pretService;
 
-    public Exemplaire findById(Integer id){
+    public Exemplaire findById(Integer id) {
         return exemplaireRepository.findById(id).get();
     }
 
-    public List<Exemplaire> findAll(){
+    public List<Exemplaire> findAll() {
         return exemplaireRepository.findAll();
     }
 
-    public void save(Exemplaire exemplaire){
+    public void save(Exemplaire exemplaire) {
         exemplaireRepository.save(exemplaire);
     }
 
+    public List<Exemplaire> findAllExemplaireByIdLivre(Integer idLivre) {
+        return exemplaireRepository.findByLivreIdLivre(idLivre);
+    }
 
     public Boolean isExemplaireDisponible(Integer id_exemplaire, LocalDateTime dateDebut, LocalDateTime dateFin) {
 
@@ -47,35 +52,64 @@ public class ExemplaireService {
 
         List<Pret> prets = pretService.findByIdExemplaire(id_exemplaire);
 
-        // if (prets.size() > 0) {
-        //     return false;
-        // }
-  
-        // return true;
-
         for (Pret pret : prets) {
- 
+
             LocalDateTime dateDebutPret = pret.getDateDebut();
             LocalDateTime dateFinPretOuRetour = null;
-    
+
             Retour retour = pretService.findRetourPret(pret);
             if (retour != null) {
+                System.out.println("----------- RETOUR NOT NULL ----------------");
                 dateFinPretOuRetour = retour.getDateRetour();
             } else {
-                FinPret finpret = pretService.findFinPret(pret);
-                if (finpret != null) {
-                    dateFinPretOuRetour = finpret.getDateFin();
-                }
+                System.out.println("----------- RETOUR NOT NULL ----------------");
+
+                return false;
+                // FinPret finpret = pretService.findFinPret(pret);
+                // if (finpret != null) {
+                // dateFinPretOuRetour = finpret.getDateFin();
+                // }
             }
-    
+
             if (dateFinPretOuRetour == null) return false;
-    
-            if (PretService.datesSeChevauchent(dateDebut, dateFin, dateDebutPret, dateFinPretOuRetour)) {
+
+            if (UtilService.periodesSeChevauchent(dateDebutPret, dateFinPretOuRetour, dateDebut, dateFin)) {
                 return false;
             }
+
         }
-    
+
         return true;
     }
-    
+
+    public Boolean isExemplaireDisponible(Integer idExemplaire, LocalDateTime dateDebut) {
+
+        if (prolongementService.isExemplaireEnProlongementActif(idExemplaire)) {
+            return false;
+        }
+
+        List<Pret> prets = pretService.findByIdExemplaire(idExemplaire);
+
+        for (Pret pret : prets) {
+            Retour retour = pretService.findRetourPret(pret);
+
+            // Si aucun retour => prêt toujours en cours => exemplaire indisponible
+            if (retour == null) {
+                return false;
+            }
+
+            // FinPret finPret = pretService.findFinPret(pret);
+
+            // Si on a le retour, on vérifie qu'il est bien revenu avant la fin prévue
+            if (retour != null && retour.getDateRetour().isBefore(dateDebut)) {
+                // continue; // exemplaire peut être dispo pour ce prêt-là
+                return true;
+            } else {
+                return false; // retour trop tard ou pas de fin prévue => indispo
+            }
+        }
+
+        return true;
+    }
+
 }
