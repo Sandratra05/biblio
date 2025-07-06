@@ -23,9 +23,9 @@ public class AdherantService {
     @Autowired
     private ProfilService profilService;
 
-
-    public Adherant findById(Integer id){
-        return adherantRepository.findById(id).get();
+    public Adherant findById(Integer id) {
+        return adherantRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Adhérant non trouvé avec l’ID " + id));
     }
 
     public List<Adherant> findAll(){

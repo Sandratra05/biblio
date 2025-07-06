@@ -63,5 +63,8 @@ public class PretService {
         return pretRepository.findPretsEnCoursAvecProlongement(idAdherant);
     }
 
+    public List<Pret> findPretEnCours(Integer idAdherant) {
+    return pretRepository.findPretEnCoursAvecDetails(idAdherant);
+    }
 
 }

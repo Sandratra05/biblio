@@ -4,13 +4,14 @@ import com.springjpa.entity.StatutProlongement;
 import com.springjpa.repository.StatutProlongementRepository;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
 public class StatutProlongementService {
 
-    private final StatutProlongementRepository repository;
-
-    public StatutProlongementService(StatutProlongementRepository repository) {
-        this.repository = repository;
-    }
+    @Autowired
+    private StatutProlongementRepository repository;
 
     public List<StatutProlongement> findAll() {
         return repository.findAll();
@@ -20,6 +21,10 @@ public class StatutProlongementService {
         return repository.save(statut);
     }
 
+    public StatutProlongement findById(Integer id) {
+        return repository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Statut prolongement ID " + id + " introuvable"));
+    }
     public void delete(int id) {
         repository.deleteById(id);
     }

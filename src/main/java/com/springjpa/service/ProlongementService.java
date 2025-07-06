@@ -42,6 +42,22 @@ public class ProlongementService {
         return !prolongements.isEmpty();
     }
 
+    public int countProlongementsActifsParAdherant(int idAdherant) {
+        return prolongementRepository.countActifsByAdherant(idAdherant, LocalDateTime.now());
+    }
+
+    public Prolongement creerProlongement(int idPret, int duree) {
+        Pret pret = pretRepository.findById(idPret)
+                                  .orElseThrow(() -> new RuntimeException("Prêt non trouvé"));
+        Prolongement p = new Prolongement();
+
+        LocalDateTime dateFin = UtilService.ajouterJours(LocalDateTime.now(), duree);
+
+        p.setDateFin(dateFin);
+        p.setPret(pret);
+        return prolongementRepository.save(p);
+    }
+
     public void prolongerPret(Integer idPret, LocalDateTime dateTime) throws Exception{
         Pret currentPret = pretRepository.findById(idPret).orElse(null);
 

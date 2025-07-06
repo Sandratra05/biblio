@@ -1,5 +1,6 @@
 package com.springjpa.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,4 +25,14 @@ public interface ProlongementRepository extends JpaRepository<Prolongement, Inte
     """, nativeQuery = true)
     List<Prolongement> findProlongementsEnCoursByExemplaire(@Param("idExemplaire") Integer idExemplaire);
 
+    @Query(value = """
+        SELECT COUNT(*) FROM prolongement p 
+        JOIN prolongement_statut ps ON ps.id_prolongement = p.id_prolongement 
+        JOIN statut_prolongement s ON s.id_statut_prolongement = ps.id_statut_prolongement
+        JOIN pret pr ON pr.id_pret = p.id_pret
+        WHERE pr.id_adherant = :idAdherant 
+          AND p.date_fin > :now
+          AND s.id_statut_prolongement = 2
+    """, nativeQuery = true)
+    int countActifsByAdherant(@Param("idAdherant") Integer idAdherant, @Param("now") LocalDateTime now);
 }

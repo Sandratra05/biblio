@@ -25,5 +25,20 @@ public class QuotaProlongementService {
         quotaProlongementRepository.save(quotaProlongement);
     }
 
+    
+    public int findQuotaByProfil(int idProfil) {
+
+        return quotaProlongementRepository.findByProfilIdProfil(idProfil)
+            .map(QuotaProlongement::getQuota)
+            .orElseThrow(() -> new RuntimeException("Quota introuvable pour le profil ID " + idProfil));
+        // QuotaProlongement quotaProlongement = quotaProlongementRepository.findByProfilIdProfil(idProfil).get();
+        // int quota = 0;
+        // if (quotaProlongement != null) {
+        //     quota = quotaProlongement.getQuota();
+        // }
+
+        // return quota;
+    }
+
 
 }

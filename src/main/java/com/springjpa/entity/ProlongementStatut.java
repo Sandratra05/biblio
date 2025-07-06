@@ -17,5 +17,21 @@ public class ProlongementStatut {
     @JoinColumn(name = "id_statut_prolongement")
     private StatutProlongement statutProlongement;
 
+    public Prolongement getProlongement() {
+        return prolongement;
+    }
+
+    public void setProlongement(Prolongement prolongement) {
+        this.prolongement = prolongement;
+    }
+
+    public StatutProlongement getStatutProlongement() {
+        return statutProlongement;
+    }
+
+    public void setStatutProlongement(StatutProlongement statutProlongement) {
+        this.statutProlongement = statutProlongement;
+    }
+
     // Getters and setters
 }

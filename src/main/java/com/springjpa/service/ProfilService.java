@@ -26,5 +26,7 @@ public class ProfilService {
         profilRepository.save(profil);
     }
 
-
+    public int getDureePret(int idProfil) {
+        return profilRepository.findDureePretByIdProfil(idProfil);
+    }
 }

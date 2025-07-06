@@ -2,6 +2,8 @@ package com.springjpa.entity;
 
 
 import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
@@ -14,7 +16,7 @@ public class Prolongement {
     private int id;
 
     @Column(name = "date_fin")
-    private Date dateFin;
+    private LocalDateTime dateFin;
 
     @ManyToOne
     @JoinColumn(name = "id_pret", nullable = false)
@@ -22,6 +24,38 @@ public class Prolongement {
 
     @OneToMany(mappedBy = "prolongement")
     private List<ProlongementStatut> prolongementStatuts;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public LocalDateTime getDateFin() {
+        return dateFin;
+    }
+
+    public void setDateFin(LocalDateTime dateFin) {
+        this.dateFin = dateFin;
+    }
+
+    public Pret getPret() {
+        return pret;
+    }
+
+    public void setPret(Pret pret) {
+        this.pret = pret;
+    }
+
+    public List<ProlongementStatut> getProlongementStatuts() {
+        return prolongementStatuts;
+    }
+
+    public void setProlongementStatuts(List<ProlongementStatut> prolongementStatuts) {
+        this.prolongementStatuts = prolongementStatuts;
+    }
 
     // Getters and setters
 }
