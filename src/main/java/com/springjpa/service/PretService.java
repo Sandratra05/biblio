@@ -29,6 +29,11 @@ public class PretService {
         return pretRepository.findAll();
     }
 
+    public List<Pret> findAllEnCoursWithDetails() {
+        return pretRepository.findAllEnCoursWithDetails();
+    }
+
+
     public void save(Pret pret){
         pretRepository.save(pret);
     }
@@ -37,8 +42,8 @@ public class PretService {
         return pretRepository.findByIdExemplaire(id_exemplaire);
     }
 
-        public FinPret findFinPret(Pret pret){
-        return pretRepository.findByIdPret(pret.getIdPret());
+    public FinPret findFinPret(Pret pret){
+        return pretRepository.findFirstByPretIdOrderByDateFinDesc(pret.getIdPret());
     }
 
     public Retour findRetourPret(Pret pret){
@@ -49,5 +54,14 @@ public class PretService {
                                              LocalDateTime debut2, LocalDateTime fin2) {
         return !fin1.isBefore(debut2) && !fin2.isBefore(debut1);
     }
+
+    public List<Pret> findPretByIdAdherant(Integer idAdherant) {
+        return pretRepository.findPretByIdAdherant(idAdherant);
+    }
+
+    public List<Pret> findPretsEnCoursAvecProlongement(Integer idAdherant) {
+        return pretRepository.findPretsEnCoursAvecProlongement(idAdherant);
+    }
+
 
 }

@@ -24,8 +24,6 @@ public class LivreService {
     @Autowired 
     private RestrictionCategorieRepository restrictionCategorieRepository;
 
-    @Autowired 
-    private ExemplaireRepository exemplaireRepository;
 
     public Livre findById(Integer id){
         return livreRepository.findById(id).get();
@@ -39,16 +37,13 @@ public class LivreService {
         livreRepository.save(livre);
     }
 
-    public List<Exemplaire> findAllExemplaireByIdLivre(Integer idLivre) {
-        return exemplaireRepository.findByLivreIdLivre(idLivre);
-    }
 
     public boolean peutPreterLivre(Adherant adherant, Livre livre) {
         // 1. Vérifier la restriction de catégorie
         for (Categorie categorie : livre.getCategories()) {
             int restreint = restrictionCategorieRepository.existsRestriction(
                 categorie.getIdCategorie(), adherant.getProfil().getIdProfil());
-            if (restreint == 0) {
+            if (restreint > 0) {
                 return false;
             }
         }

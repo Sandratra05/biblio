@@ -88,13 +88,14 @@ public class PenaliteService {
     }
 
     public boolean isPenalise(LocalDateTime date, Integer idAdherant){
-        Penalite lastpenalite = penaliteRepository.findByAdherant(adherantRepository.findById(idAdherant).orElse(null))
-        .stream()
-        .sorted(Comparator.comparing(penalite -> penalite.getDatePenalite().plusDays(penalite.getDuree())))
-        .collect(Collectors.toList()).getFirst();
-        if (lastpenalite.getDatePenalite().plusDays(lastpenalite.getDuree()).isAfter(date)) {
-            return true;
+        List<Penalite> penalites = penaliteRepository.findByAdherant(adherantRepository.findById(idAdherant).orElse(null));
+        if (penalites.isEmpty()) {
+            return false;
         }
-        return false;
+        Penalite lastpenalite = penalites.stream()
+            .sorted(Comparator.comparing(penalite -> penalite.getDatePenalite().plusDays(penalite.getDuree())))
+            .collect(Collectors.toList())
+            .getFirst();
+        return lastpenalite.getDatePenalite().plusDays(lastpenalite.getDuree()).isAfter(date);
     }
 }

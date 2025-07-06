@@ -7,8 +7,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 
 
 import java.time.LocalDateTime;
@@ -18,7 +16,6 @@ import java.time.LocalDateTime;
 public class Reservation {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_reservation")
     private Integer idReservation;
     
@@ -26,12 +23,16 @@ public class Reservation {
     private LocalDateTime dateDeReservation;
     
     @ManyToOne
-    @JoinColumn(name = "id_admin", nullable = false)
+    @JoinColumn(name = "id_admin", nullable = true)
     private Admin admin;
     
     @ManyToOne
-    @JoinColumn(name = "id_exemplaire", nullable = false)
-    private Exemplaire exemplaire;
+    @JoinColumn(name = "id_statut", nullable = false)
+    private StatutReservation statut;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_livre", nullable = false)
+    private Livre livre;
     
     @ManyToOne
     @JoinColumn(name = "id_adherant", nullable = false)
@@ -41,12 +42,13 @@ public class Reservation {
     public Reservation() {}
     
     public Reservation(Integer idReservation, LocalDateTime dateDeReservation, 
-                       Admin admin, Exemplaire exemplaire, 
+                       Admin admin, StatutReservation statut, Livre livre, 
                        Adherant adherant) {
         this.idReservation = idReservation;
         this.dateDeReservation = dateDeReservation;
         this.admin = admin;
-        this.exemplaire = exemplaire;
+        this.statut = statut;
+        this.livre = livre;
         this.adherant = adherant;
     }
     
@@ -75,12 +77,20 @@ public class Reservation {
         this.admin = admin;
     }
     
-    public Exemplaire getExemplaire() {
-        return exemplaire;
+    public StatutReservation getStatut() {
+        return statut;
     }
     
-    public void setExemplaire(Exemplaire exemplaire) {
-        this.exemplaire = exemplaire;
+    public void setStatut(StatutReservation statut) {
+        this.statut = statut;
+    }
+    
+    public Livre getLivre() {
+        return livre;
+    }
+    
+    public void setLivre(Livre livre) {
+        this.livre = livre;
     }
     
     public Adherant getAdherant() {

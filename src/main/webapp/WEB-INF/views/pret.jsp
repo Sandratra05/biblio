@@ -42,7 +42,7 @@
             font-size: 1em;
             background: #f9fafb;
         }
-        button[type="submit"] {
+        button[type="submit"], [type="button"] {
             background: #2980b9;
             color: #fff;
             border: none;
@@ -52,13 +52,24 @@
             cursor: pointer;
             transition: background 0.2s;
         }
-        button[type="submit"]:hover {
+        button[type="submit"]:hover, [type="button"]:hover {
             background: #1c5d85;
         }
         .message {
             color: #c0392b;
             background: #fdecea;
             border: 1px solid #e17055;
+            border-radius: 5px;
+            padding: 10px 15px;
+            margin: 20px auto 0 auto;
+            max-width: 500px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .success {
+            color: #44d43f;
+            background: #eafdee;
+            border: 1px solid #7de155;
             border-radius: 5px;
             padding: 10px 15px;
             margin: 20px auto 0 auto;
@@ -96,9 +107,15 @@
         <input type="date" name="dateFin" id="dateFin" required>
         <button type="submit">Valider le pr&ecirc;t</button>
     </form>
+    <a href="dashboard"><button type="button">Retour</button></a>
     <c:if test="${not empty message}">
         <div class="message">
             ${message}
+        </div>
+    </c:if>
+    <c:if test="${not empty success}">
+        <div class="success">
+            ${success}
         </div>
     </c:if>
 </body>
