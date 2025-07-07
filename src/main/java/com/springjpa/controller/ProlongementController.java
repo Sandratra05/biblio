@@ -96,20 +96,49 @@ public class ProlongementController {
     }
 
     private String insererProlongementStatut(Integer idPret, Integer idStatut) {
-        List<Prolongement> prolongements = prolongementService.findByPretId(idPret);
+        try {
+            List<Prolongement> prolongements = prolongementService.findByPretId(idPret);
 
-        if (!prolongements.isEmpty()) {
-            Prolongement prolongement = prolongements.get(0); // on prend le premier
+            if (!prolongements.isEmpty()) {
+                Prolongement prolongement = prolongements.get(0); // on prend le premier
+                StatutProlongement statut = statutProlongementService.findById(idStatut);
 
-            ProlongementStatut ps = new ProlongementStatut();
-            ps.setProlongement(prolongement);
-            ps.setStatutProlongement(statutProlongementService.findById(idStatut));
+                // Créer d'abord la clé composite
+                ProlongementStatutId psId = new ProlongementStatutId();
+                psId.setIdProlongement(prolongement.getId());
+                psId.setIdStatutProlongement(statut.getIdStatutProlongement());
 
-            prolongementStatutService.save(ps);
+                // Créer l'entité ProlongementStatut
+                ProlongementStatut ps = new ProlongementStatut();
+                ps.setId(psId); // Important : définir l'ID avant les relations
+                ps.setProlongement(prolongement);
+                ps.setStatutProlongement(statut);
+
+                prolongementStatutService.save(ps);
+            }
+
+            return "redirect:/prets-attente"; // Correction de l'URL
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/prets-attente?error=" + e.getMessage();
         }
-
-        return "redirect:/prets-attente"; // ou ton URL de retour
     }
+    
+    // private String insererProlongementStatut(Integer idPret, Integer idStatut) {
+    //     List<Prolongement> prolongements = prolongementService.findByPretId(idPret);
+
+    //     if (!prolongements.isEmpty()) {
+    //         Prolongement prolongement = prolongements.get(0); // on prend le premier
+
+    //         ProlongementStatut ps = new ProlongementStatut();
+    //         ps.setProlongement(prolongement);
+    //         ps.setStatutProlongement(statutProlongementService.findById(idStatut));
+
+    //         prolongementStatutService.save(ps);
+    //     }
+
+    //     return "redirect:/prets-attente"; // ou ton URL de retour
+    // }
 
 
     // private String insererProlongementStatut(int idProlongement, int idStatut) {
