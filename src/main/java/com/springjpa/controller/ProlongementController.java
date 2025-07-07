@@ -2,10 +2,12 @@ package com.springjpa.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.springjpa.entity.*;
@@ -14,6 +16,9 @@ import com.springjpa.service.*;
 @Controller
 @RequestMapping("/prolongement")
 public class ProlongementController {
+
+    @Autowired
+    private PretService pretService;
 
     @Autowired
     private ProlongementService prolongementService;
@@ -40,7 +45,7 @@ public class ProlongementController {
         @RequestParam("idAdherant") Integer idAdherant
     ) {
         try {
-            // 1. Récupérer l'adhérant et son profil
+            // 1. Récupérer l'adhérant et son profil et le pret
             Adherant adherant = adherantService.findById(idAdherant);
             Profil profil = adherant.getProfil();
 
@@ -59,8 +64,6 @@ public class ProlongementController {
             // 4. Insérer le prolongement avec date de fin et id_pret
             Prolongement prolongement = prolongementService.creerProlongement(idPret, duree);
 
-
-
             // 5. Associer le statut "en attente" au prolongement
             StatutProlongement statut = statutProlongementService.findById(1);
             prolongementStatutService.associerStatut(prolongement, statut);
@@ -72,4 +75,62 @@ public class ProlongementController {
             return "Erreur : " + e.getMessage();
         }
     }
+
+    @GetMapping("/prets-attente")
+    public String afficherPretsEnAttente(Model model) {
+        List<Pret> prets = pretService.getPretsAvecProlongementEnAttente();
+        model.addAttribute("prets", prets);
+        return "prets-attente";
+    }
+
+    // Pour "Valider" (idStatut = 2)
+    @GetMapping("/valider")
+    public String validerProlongement(@RequestParam("id") Integer idPret) {
+        return insererProlongementStatut(idPret, 2); // 2 = validé
+    }
+
+    // Pour "Refuser" (idStatut = 3)
+    @GetMapping("/refuser")
+    public String refuserProlongement(@RequestParam("id") Integer idPret) {
+        return insererProlongementStatut(idPret, 3); // 3 = refusé
+    }
+
+    private String insererProlongementStatut(Integer idPret, Integer idStatut) {
+        List<Prolongement> prolongements = prolongementService.findByPretId(idPret);
+
+        if (!prolongements.isEmpty()) {
+            Prolongement prolongement = prolongements.get(0); // on prend le premier
+
+            ProlongementStatut ps = new ProlongementStatut();
+            ps.setProlongement(prolongement);
+            ps.setStatutProlongement(statutProlongementService.findById(idStatut));
+
+            prolongementStatutService.save(ps);
+        }
+
+        return "redirect:/prets-attente"; // ou ton URL de retour
+    }
+
+
+    // private String insererProlongementStatut(int idProlongement, int idStatut) {
+    //     Optional<Prolongement> prolongementOpt = prolongementService.findById(idProlongement);
+    //     Optional<StatutProlongement> statutOpt = statutProlongementService.findById(idStatut);
+
+    //     if (prolongementOpt.isPresent() && statutOpt.isPresent()) {
+    //         ProlongementStatut ps = new ProlongementStatut();
+
+    //         // Clé composée
+    //         ProlongementStatutId psId = new ProlongementStatutId();
+    //         psId.setIdProlongement(idProlongement);
+    //         psId.setIdStatutProlongement(idStatut);
+
+    //         ps.setId(psId);
+    //         ps.setProlongement(prolongementOpt.get());
+    //         ps.setStatutProlongement(statutOpt.get());
+
+    //         prolongementStatutService.save(ps);
+    //     }
+
+    //     return "redirect:/prolongements-attente"; // ou autre URL
+    // }
 }

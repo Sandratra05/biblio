@@ -22,8 +22,8 @@ public class Prolongement {
     @JoinColumn(name = "id_pret", nullable = false)
     private Pret pret;
 
-    @OneToMany(mappedBy = "prolongement")
-    private List<ProlongementStatut> prolongementStatuts;
+    @OneToMany(mappedBy = "prolongement", fetch = FetchType.LAZY)
+    private List<ProlongementStatut> prolongementStatut;
 
     public int getId() {
         return id;
@@ -49,13 +49,13 @@ public class Prolongement {
         this.pret = pret;
     }
 
-    public List<ProlongementStatut> getProlongementStatuts() {
-        return prolongementStatuts;
-    }
+    // public List<ProlongementStatut> getProlongementStatuts() {
+    //     return prolongementStatut;
+    // }
 
-    public void setProlongementStatuts(List<ProlongementStatut> prolongementStatuts) {
-        this.prolongementStatuts = prolongementStatuts;
-    }
+    // public void setProlongementStatuts(List<ProlongementStatut> prolongementStatut) {
+    //     this.prolongementStatut = prolongementStatut;
+    // }
 
     // Getters and setters
 }

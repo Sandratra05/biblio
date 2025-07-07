@@ -4,19 +4,22 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "prolongement_statut")
-@IdClass(ProlongementStatutId.class)
+// @IdClass(ProlongementStatutId.class)
 public class ProlongementStatut {
+    @EmbeddedId
+    private ProlongementStatutId id;
 
-    @Id
     @ManyToOne
+    @MapsId("idProlongement")
     @JoinColumn(name = "id_prolongement")
     private Prolongement prolongement;
 
-    @Id
     @ManyToOne
+    @MapsId("idStatutProlongement")
     @JoinColumn(name = "id_statut_prolongement")
     private StatutProlongement statutProlongement;
 
+    
     public Prolongement getProlongement() {
         return prolongement;
     }
@@ -31,6 +34,14 @@ public class ProlongementStatut {
 
     public void setStatutProlongement(StatutProlongement statutProlongement) {
         this.statutProlongement = statutProlongement;
+    }
+
+    public ProlongementStatutId getId() {
+        return id;
+    }
+
+    public void setId(ProlongementStatutId id) {
+        this.id = id;
     }
 
     // Getters and setters

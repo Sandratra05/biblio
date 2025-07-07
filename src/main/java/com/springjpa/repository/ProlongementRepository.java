@@ -35,4 +35,7 @@ public interface ProlongementRepository extends JpaRepository<Prolongement, Inte
           AND s.id_statut_prolongement = 2
     """, nativeQuery = true)
     int countActifsByAdherant(@Param("idAdherant") Integer idAdherant, @Param("now") LocalDateTime now);
+
+    @Query("SELECT p FROM Prolongement p WHERE p.pret.idPret = :idPret")
+    List<Prolongement> findByPretId(@Param("idPret") Integer idPret);
 }
