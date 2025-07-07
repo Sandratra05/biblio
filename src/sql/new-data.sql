@@ -30,6 +30,14 @@ INSERT INTO type_pret (id_type_pret, type) VALUES (1, 'A domicile');
 INSERT INTO duree_pret (id_duree_pret, duree, id_profil) VALUES (1, 30, 1);
 INSERT INTO duree_pret (id_duree_pret, duree, id_profil) VALUES (2, 15, 2);
 
+-- Insertion pour le profil 1
+INSERT INTO quota_prolongement (quota, id_profil) 
+VALUES (5, 1);
+
+-- Insertion pour le profil 2
+INSERT INTO quota_prolongement (quota, id_profil) 
+VALUES (2, 2);
+
 -- STATUT_RESERVATION
 INSERT INTO statut_reservation (id_statut_reservation, nom_statut) VALUES (1, 'En attente');
 INSERT INTO statut_reservation (id_statut_reservation, nom_statut) VALUES (2, 'Validée');
@@ -114,3 +122,18 @@ FROM pret p
 LEFT JOIN retour r ON p.id_pret = r.id_pret
 LEFT JOIN fin_pret f ON p.id_pret = f.id_pret
 WHERE r.id_retour IS NULL AND f.id_fin_pret IS NULL;
+
+SELECT p.*
+FROM pret p
+WHERE p.id_adherant = 3
+  AND p.id_pret NOT IN (
+      SELECT r.id_pret FROM retour r
+  )
+  AND (
+      NOT EXISTS (
+          SELECT 1 FROM fin_pret f WHERE f.id_pret = p.id_pret
+      )
+      OR EXISTS (
+          SELECT 1 FROM fin_pret f WHERE f.id_pret = p.id_pret AND f.date_fin > NOW()
+      )
+  );

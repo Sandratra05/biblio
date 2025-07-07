@@ -16,6 +16,7 @@
                     <th>Exemplaire</th>
                     <th>Livre</th>
                     <th>Type de prêt</th>
+                    <th>Action</th>
                 </tr>
                 <c:forEach items="${prets}" var="pret">
                     <tr>
@@ -24,6 +25,14 @@
                         <td>${pret.exemplaire.idExemplaire}</td>
                         <td>${pret.exemplaire.livre.titre}</td>
                         <td>${pret.typePret.type}</td>
+                        <td>
+                            <form action="${pageContext.request.contextPath}/prolongement/demander-prolongement" method="post">
+                            <input type="hidden" name="idPret" value="${pret.idPret}" />
+                            <input type="hidden" name="idAdherant" value="${adherant.idAdherant}" />
+                            <!-- <input type="hidden" name="date" value="<%= java.time.LocalDateTime.now() %>" /> -->
+                            <button type="submit">Demander un prolongement</button>
+                            </form>
+                        </td>
                     </tr>
                 </c:forEach>
             </table>

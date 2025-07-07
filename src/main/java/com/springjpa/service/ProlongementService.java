@@ -3,6 +3,7 @@ package com.springjpa.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,9 +38,36 @@ public class ProlongementService {
     @Autowired
     private ProlongementRepository prolongementRepository;
 
+
+    public List<Prolongement> findById(int idPret) {
+        return prolongementRepository.findByPretId(idPret);
+    }
+
     public boolean isExemplaireEnProlongementActif(Integer idExemplaire) {
         List<Prolongement> prolongements = prolongementRepository.findProlongementsEnCoursByExemplaire(idExemplaire);
         return !prolongements.isEmpty();
+    }
+
+    public List<Prolongement> findByPretId(int idPret) {
+        return prolongementRepository.findByPretId(idPret);
+    }
+
+    public int countProlongementsActifsParAdherant(int idAdherant) {
+        return prolongementRepository.countActifsByAdherant(idAdherant, LocalDateTime.now());
+    }
+
+    public Prolongement creerProlongement(int idPret, int duree) {
+        Pret pret = pretRepository.findById(idPret)
+                                  .orElseThrow(() -> new RuntimeException("Prêt non trouvé"));
+        Prolongement p = new Prolongement();
+
+        FinPret finPret = finPretRepository.findByIdPret(idPret);
+
+        LocalDateTime dateFin = UtilService.ajouterJours(finPret.getDateFin(), duree);
+
+        p.setDateFin(dateFin);
+        p.setPret(pret);
+        return prolongementRepository.save(p);
     }
 
     public void prolongerPret(Integer idPret, LocalDateTime dateTime) throws Exception{

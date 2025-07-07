@@ -51,7 +51,7 @@ public class AdherantController {
     public String afficherPretsAdherant(HttpSession session, Model model) {
 
         Adherant adherant = (Adherant) session.getAttribute("adherant");
-        List<Pret> prets = pretService.findPretsEnCoursAvecProlongement(adherant.getIdAdherant());
+        List<Pret> prets = pretService.findPretEnCours(adherant.getIdAdherant());
 
         model.addAttribute("prets", prets);
         model.addAttribute("adherant", adherant);

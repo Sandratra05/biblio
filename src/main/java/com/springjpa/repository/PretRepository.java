@@ -46,6 +46,39 @@ public interface PretRepository extends JpaRepository<Pret, Integer> {
     """, nativeQuery = true)
     List<Pret> findPretsEnCoursAvecProlongement(@Param("idAdherant") Integer idAdherant);
 
+    @Query(value = """
+        SELECT p.*
+        FROM pret p
+        WHERE p.id_adherant = :idAdherant
+        AND p.id_pret NOT IN (
+            SELECT r.id_pret FROM retour r
+        )
+        AND (
+            NOT EXISTS (
+                SELECT 1 FROM fin_pret f WHERE f.id_pret = p.id_pret
+            )
+            OR EXISTS (
+                SELECT 1 FROM fin_pret f WHERE f.id_pret = p.id_pret AND f.date_fin > NOW()
+            )
+        )
+    """, nativeQuery = true)
+    List<Pret> findPretsEnCours(@Param("idAdherant") Integer idAdherant);
+
+    @Query("""
+        SELECT p FROM Pret p
+        JOIN FETCH p.exemplaire e
+        JOIN FETCH e.livre
+        JOIN FETCH p.typePret
+        WHERE p.adherant.idAdherant = :idAdherant
+        AND p.idPret NOT IN (SELECT r.pret.idPret FROM Retour r)
+        AND (
+            NOT EXISTS (SELECT 1 FROM FinPret f WHERE f.pret.idPret = p.idPret)
+            OR EXISTS (SELECT 1 FROM FinPret f WHERE f.pret.idPret = p.idPret AND f.dateFin > CURRENT_TIMESTAMP)
+        )
+    """)
+    List<Pret> findPretEnCoursAvecDetails(@Param("idAdherant") Integer idAdherant);
+
+
     @Query("""
         SELECT p
         FROM Pret p
@@ -57,5 +90,37 @@ public interface PretRepository extends JpaRepository<Pret, Integer> {
         )
     """)
     List<Pret> findAllEnCoursWithDetails();
+        
+    // @Query(value = """
+    //     SELECT DISTINCT p.*
+    //     FROM pret p
+    //     JOIN adherant a ON p.id_adherant = a.id_adherant
+    //     JOIN exemplaire e ON p.id_exemplaire = e.id_exemplaire
+    //     JOIN livre l ON e.id_livre = l.id_livre
+    //     JOIN type_pret tp ON p.id_type_pret = tp.id_type_pret
+    //     WHERE EXISTS (
+    //         SELECT 1
+    //         FROM prolongement pr
+    //         JOIN prolongement_statut ps ON ps.id_prolongement = pr.id_prolongement
+    //         WHERE pr.id_pret = p.id_pret
+    //         AND ps.id_statut_prolongement = 1
+    //     )
+    // """, nativeQuery = true)
+    // List<Pret> findPretsAvecProlongementEnAttente();
+
+
+    @Query("""
+        SELECT DISTINCT p FROM Pret p
+        JOIN FETCH p.adherant
+        JOIN FETCH p.exemplaire e
+        JOIN FETCH e.livre
+        JOIN FETCH p.typePret
+        WHERE EXISTS (
+            SELECT 1 FROM Prolongement pr
+            JOIN pr.prolongementStatut ps
+            WHERE pr.pret = p AND ps.statutProlongement = 1
+        )
+    """)
+    List<Pret> findPretsAvecProlongementEnAttente();
 
 }

@@ -77,7 +77,7 @@
                 </select>
 
                 <label for="nom">Num&eacute;ro matricule:</label>
-                <input type="text" name="numeroAdherant" id="nom" placeholder="Ex: 1">
+                <input type="number" name="numeroAdherant" id="nom" placeholder="Ex: 1">
 
                 <label for="mdp">Mot de passe :</label>
                 <input type="password" name="motDePasse" id="mdp" placeholder="************************">
