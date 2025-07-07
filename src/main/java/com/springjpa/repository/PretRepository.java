@@ -109,18 +109,36 @@ public interface PretRepository extends JpaRepository<Pret, Integer> {
     // List<Pret> findPretsAvecProlongementEnAttente();
 
 
-    @Query("""
-        SELECT DISTINCT p FROM Pret p
-        JOIN FETCH p.adherant
-        JOIN FETCH p.exemplaire e
-        JOIN FETCH e.livre
-        JOIN FETCH p.typePret
+    // @Query("""
+    //     SELECT DISTINCT p FROM Pret p
+    //     JOIN FETCH p.adherant
+    //     JOIN FETCH p.exemplaire e
+    //     JOIN FETCH e.livre
+    //     JOIN FETCH p.typePret
+    //     WHERE EXISTS (
+    //         SELECT 1 FROM Prolongement pr
+    //         JOIN pr.prolongementStatut ps
+    //         WHERE pr.pret = p AND ps.statutProlongement = 1
+    //     )
+    // """)
+    @Query(value = """
+        SELECT DISTINCT p.* FROM pret p
+        JOIN adherant a ON p.id_adherant = a.id_adherant
+        JOIN exemplaire ex ON p.id_exemplaire = ex.id_exemplaire
+        JOIN livre l ON ex.id_livre = l.id_livre
+        JOIN type_pret tp ON p.id_type_pret = tp.id_type_pret
         WHERE EXISTS (
-            SELECT 1 FROM Prolongement pr
-            JOIN pr.prolongementStatut ps
-            WHERE pr.pret = p AND ps.statutProlongement = 1
+            SELECT 1 FROM prolongement pr
+            JOIN prolongement_statut ps ON pr.id_prolongement = ps.id_prolongement
+            WHERE pr.id_pret = p.id_pret 
+            AND ps.id_statut_prolongement = 1
+            AND NOT EXISTS (
+                SELECT 1 FROM prolongement_statut ps2
+                WHERE ps2.id_prolongement = pr.id_prolongement
+                AND ps2.id_statut_prolongement IN (2, 3, 4)
+            )
         )
-    """)
+    """, nativeQuery = true)
     List<Pret> findPretsAvecProlongementEnAttente();
 
 }

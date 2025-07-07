@@ -79,6 +79,8 @@ public class ProlongementController {
     @GetMapping("/prets-attente")
     public String afficherPretsEnAttente(Model model) {
         List<Pret> prets = pretService.getPretsAvecProlongementEnAttente();
+
+        
         model.addAttribute("prets", prets);
         return "prets-attente";
     }
