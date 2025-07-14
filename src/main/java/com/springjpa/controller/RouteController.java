@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpSession;
 public class RouteController {
     @GetMapping("/")
     public String index() {
-        return "login"; // Redirection vers la page d'accueil
+        return "redirect:/login/"; // Redirection vers la page d'accueil
     }
 
     @GetMapping("/home")

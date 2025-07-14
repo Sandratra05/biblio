@@ -65,6 +65,15 @@
             </div>
         </c:if>
         <form action="reserveBook" method="post">
+            <label for="adherant">Num&eacute;ro adh&eacute;rant</label>
+            <select id="adherant" name="adherant">
+                <option value="">--Choisir un adh&eacute;rant--</option>
+                <!-- Ajouter dynamiquement les options des livres -->
+                <c:forEach var="adherant" items="${adherants}">
+                    <option value="${adherant.getIdAdherant()}">${adherant.getNomAdherant()}</option>
+                </c:forEach>
+            </select>
+
             <label for="book">Selectionnez un livre :</label>
             <select id="book" name="livre">
                 <option value="">--Choisir un livre--</option>

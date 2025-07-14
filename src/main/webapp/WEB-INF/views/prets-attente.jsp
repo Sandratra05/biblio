@@ -2,22 +2,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Prêts en prolongement en attente</title>
+    <title>Pr&ecirc;ts en prolongement en attente</title>
 </head>
 <body>
-    <h2>Liste des prêts avec prolongement en attente</h2>
+    <h2>Liste des pr&ecirc;ts avec prolongement en attente</h2>
 
     <c:choose>
         <c:when test="${not empty prets}">
             <table border="1">
                 <thead>
                     <tr>
-                        <th>ID Prêt</th>
-                        <th>Adhérant</th>
-                        <th>Date de début</th>
+                        <th>ID Pr&ecirc;t</th>
+                        <th>Adh&eacute;rant</th>
+                        <th>Date de d&eacute;but</th>
                         <th>Exemplaire</th>
                         <th>Livre</th>
-                        <th>Type de prêt</th>
+                        <th>Type de pr&ecirc;t</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -40,7 +40,7 @@
             </table>
         </c:when>
         <c:otherwise>
-            <p>Aucun prêt avec prolongement en attente trouvé.</p>
+            <p>Aucun pr&ecirc;t avec prolongement en attente trouv&eacute;.</p>
         </c:otherwise>
     </c:choose>
 

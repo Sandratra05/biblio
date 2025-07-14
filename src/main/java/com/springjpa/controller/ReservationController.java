@@ -4,11 +4,15 @@ import com.springjpa.entity.Adherant;
 import com.springjpa.entity.Exemplaire;
 import com.springjpa.entity.Livre;
 import com.springjpa.entity.Reservation;
+import com.springjpa.entity.ReservationStatut;
 import com.springjpa.service.AdherantService;
 import com.springjpa.service.ExemplaireService;
 import com.springjpa.service.LivreService;
 import com.springjpa.service.ReservationService;
+import com.springjpa.service.ReservationStatutService;
 import com.springjpa.service.UtilService;
+
+import jakarta.servlet.http.HttpSession;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -39,29 +43,63 @@ public class ReservationController {
     @Autowired
     private ReservationService reservationService;
 
+    @Autowired
+    private ReservationStatutService reservationStatutService;
+
     private UtilService utilService;
 
-    @GetMapping("/reservation")
+    @GetMapping("/")
     public String formResa(Model model) {
         List<Livre> livres = livreService.findAll();
+        List<Adherant> adherants = adherantService.findAll();
 
         model.addAttribute("books", livres);
+        model.addAttribute("adherants", adherants);
+
         return "form-reservation"; // Redirection vers la page d'accueil
     }
 
     @PostMapping("/reserveBook")
     public String reserverLivre(@RequestParam("livre") int id_livre,
+                                @RequestParam("adherant") int idAdherant,
                                 @RequestParam("date") LocalDate date,
-                                RedirectAttributes redirectAttributes) {
-        // try {
-            Integer id_adherant = 1;
+                                RedirectAttributes redirectAttributes,
+                                HttpSession session) {
+        
+            Integer idAdhe = 0;
+            Adherant adherant = (Adherant) session.getAttribute("adherant");
+            if (adherant != null && adherant.getIdAdherant() > 0) {
+                idAdhe = adherant.getIdAdherant();
+            } else {
+                idAdhe = idAdherant;
+            }
+
             LocalDateTime dateTime = UtilService.toDateTimeWithCurrentTime(date);
-            reservationService.reserverUnLivre(id_adherant, id_livre, dateTime);
-            redirectAttributes.addFlashAttribute("success", "Reservation reussi, passez au bibliotheque le ".concat(date.toString()));
+            
+            reservationService.reserverUnLivre(idAdhe, id_livre, dateTime);
+            
+            redirectAttributes.addFlashAttribute("success", "Réservation réussi, passez au bibliotheque le ".concat(date.toString()));
         // } catch (Exception e) {
         //     redirectAttributes.addFlashAttribute("success", "Echec lors de la reservation du livre");
         // }
         return "redirect:/reservation";
     }
+
+    @GetMapping("/resa-attente")
+    public String afficherReservationsAValider(Model model) {
+        List<ReservationStatut> enAttente = reservationStatutService.findReservationsEnAttente();
+        model.addAttribute("reservationsEnAttente", enAttente);
+        return "validation-reservation";
+    }
+
+    @PostMapping("/valider")
+    public String validerReservation(@RequestParam("idReservation") int idReservation,
+                                    RedirectAttributes redirectAttributes) {
+        Reservation reservation = reservationService.findById(idReservation);
+        reservationStatutService.validerReservation(reservation);
+        redirectAttributes.addFlashAttribute("success", "Réservation validée avec succès !");
+        return "redirect:/reservation/resa-attente";
+    }
+
 
 }

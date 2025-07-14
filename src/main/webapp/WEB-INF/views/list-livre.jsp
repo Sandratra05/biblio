@@ -101,8 +101,14 @@
                             </c:forEach>
                         </td>
                         <td>
-                            <button onclick="location.href='detail?id=${livre.getIdLivre()}'">Detail</button>
-                            <button onclick="location.href='/reserveBook?id=${livre.getIdLivre()}'">Reserver</button>
+                            <input type="hidden" name="adherant">
+                            <button onclick="location.href='${pageContext.request.contextPath}/livre/detail?id=${livre.getIdLivre()}'">Detail</button>
+                            <!-- <form action="" method="get"></form> -->
+                            <form action="${pageContext.request.contextPath}/reservation/reserveBook" method="post">
+                                <input type="hidden" name="livre" value="livre.getIdLivre()" id="">
+                                <button type="submit">R&eacute;server</button>
+                            </form>
+                            <!-- <button onclick="location.href='${pageContext.request.contextPath}/reservation/reserveBook?id=${livre.getIdLivre()}'">Reserver</button> -->
                         </td>
                     </tr>
                 </c:forEach>
