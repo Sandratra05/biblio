@@ -47,12 +47,6 @@
     </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <div class="navbar">
-        <a href="/home">Accueil</a>
-        <a href="/books">Livres</a>
-        <a href="/about">À propos</a>
-    </div>
 
     <!-- Content Section -->
     <div class="container">
@@ -96,7 +90,7 @@
                         <td>${livre.getIsbn()}</td>
                         <td>${livre.getLangue()}</td>
                         <td>
-                            <c:forEach var="categorie" items="${livre.getCategories()}">
+                            <c:forEach var="categorie" items="${livre.categories}">
                                 ${categorie.getNomCategorie()}<br>
                             </c:forEach>
                         </td>
@@ -104,9 +98,13 @@
                             <input type="hidden" name="adherant">
                             <button onclick="location.href='${pageContext.request.contextPath}/livre/detail?id=${livre.getIdLivre()}'">Detail</button>
                             <!-- <form action="" method="get"></form> -->
-                            <form action="${pageContext.request.contextPath}/reservation/reserveBook" method="post">
-                                <input type="hidden" name="livre" value="livre.getIdLivre()" id="">
+                            <form action="/biblio-spring-1.0/reservation/reserveBook" method="post">
+                                <input type="hidden" name="livre" value="${livre.idLivre}">
+                                <input type="hidden" name="adherant">
+                                <input type="hidden" name="date" value="<%= java.time.LocalDate.now() %>">
                                 <button type="submit">R&eacute;server</button>
+                                <!-- <input type="hidden" name="livre" value="${livre.idLivre}">
+                                <button type="submit">R&eacute;server</button> -->
                             </form>
                             <!-- <button onclick="location.href='${pageContext.request.contextPath}/reservation/reserveBook?id=${livre.getIdLivre()}'">Reserver</button> -->
                         </td>

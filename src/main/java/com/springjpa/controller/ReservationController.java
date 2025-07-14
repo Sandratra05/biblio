@@ -60,30 +60,36 @@ public class ReservationController {
     }
 
     @PostMapping("/reserveBook")
-    public String reserverLivre(@RequestParam("livre") int id_livre,
-                                @RequestParam("adherant") int idAdherant,
-                                @RequestParam("date") LocalDate date,
+    public String reserverLivre(@RequestParam(value = "livre", required = true) Integer id_livre,
+                                @RequestParam(value = "adherant", required = false) Integer idAdherant,
+                                @RequestParam(value = "date", required = false) LocalDate date,
                                 RedirectAttributes redirectAttributes,
                                 HttpSession session) {
-        
-            Integer idAdhe = 0;
-            Adherant adherant = (Adherant) session.getAttribute("adherant");
-            if (adherant != null && adherant.getIdAdherant() > 0) {
-                idAdhe = adherant.getIdAdherant();
-            } else {
-                idAdhe = idAdherant;
-            }
 
-            LocalDateTime dateTime = UtilService.toDateTimeWithCurrentTime(date);
-            
-            reservationService.reserverUnLivre(idAdhe, id_livre, dateTime);
-            
-            redirectAttributes.addFlashAttribute("success", "Réservation réussi, passez au bibliotheque le ".concat(date.toString()));
-        // } catch (Exception e) {
-        //     redirectAttributes.addFlashAttribute("success", "Echec lors de la reservation du livre");
-        // }
+        if (id_livre == null || date == null) {
+            redirectAttributes.addFlashAttribute("error", "Le livre et la date sont obligatoires.");
+            return "redirect:/reservation";
+        }
+
+        Integer idAdhe = null;
+        Adherant adherant = (Adherant) session.getAttribute("adherant");
+        
+        if (adherant != null && adherant.getIdAdherant() > 0) {
+            idAdhe = adherant.getIdAdherant();
+        } else if (idAdherant != null) {
+            idAdhe = idAdherant;
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Aucun adhérant spécifié.");
+            return "redirect:/reservation";
+        }
+
+        LocalDateTime dateTime = UtilService.toDateTimeWithCurrentTime(date);
+        reservationService.reserverUnLivre(idAdhe, id_livre, dateTime);
+
+        redirectAttributes.addFlashAttribute("success", "Réservation réussie, passez à la bibliothèque le " + date);
         return "redirect:/reservation";
     }
+
 
     @GetMapping("/resa-attente")
     public String afficherReservationsAValider(Model model) {
@@ -101,5 +107,12 @@ public class ReservationController {
         return "redirect:/reservation/resa-attente";
     }
 
-
+    @PostMapping("/refuser")
+    public String refuserReservation(@RequestParam("idReservation") int idReservation,
+                                    RedirectAttributes redirectAttributes) {
+        Reservation reservation = reservationService.findById(idReservation);
+        reservationStatutService.validerReservation(reservation);
+        redirectAttributes.addFlashAttribute("error", "Réservation refusée");
+        return "redirect:/reservation/resa-attente";
+    }
 }

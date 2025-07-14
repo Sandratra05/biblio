@@ -51,4 +51,8 @@ public class ReservationStatutService {
         // repository.deleteById(id); // Supprime le statut 1
         associerStatut(reservation, statutReservationService.findById(2)); // Ajoute le statut 2
     }
+
+    public void refuserReservation(Reservation reservation) {
+        associerStatut(reservation, statutReservationService.findById(3));
+    }
 }

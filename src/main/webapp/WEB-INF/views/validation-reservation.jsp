@@ -10,6 +10,10 @@
     <p style="color: green;">${success}</p>
 </c:if>
 
+<c:if test="${not empty error}">
+    <p style="color: red;">${error}</p>
+</c:if>
+
 <table border="1">
     <thead>
         <tr>
@@ -31,6 +35,10 @@
                 <form method="post" action="${pageContext.request.contextPath}/reservation/valider">
                     <input type="hidden" name="idReservation" value="${rs.reservation.idReservation}" />
                     <button type="submit">Valider</button>
+                </form>
+                <form method="post" action="${pageContext.request.contextPath}/reservation/refuser">
+                    <input type="hidden" name="idReservation" value="${rs.reservation.idReservation}" />
+                    <button type="submit">Refuser</button>
                 </form>
             </td>
         </tr>
