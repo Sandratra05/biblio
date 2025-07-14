@@ -63,13 +63,13 @@ VALUES (5, 'Le Père Goriot', '9783333333333', 'Français', 1835, 'Roman réalis
 
 -- ADHERANT (4 adhérants, 2 profs, 2 étudiants)
 INSERT INTO adherant (id_adherant, nom_adherant, prenom_adherant, password, date_naissance, id_profil)
-VALUES (1, 'Martin', 'Paul', 'passprof1', '1980-05-10', 1);
+VALUES (1, 'Martin', 'Paul', 'adp1', '1980-05-10', 1);
 INSERT INTO adherant (id_adherant, nom_adherant, prenom_adherant, password, date_naissance, id_profil)
-VALUES (2, 'Durand', 'Sophie', 'passprof2', '1978-11-22', 1);
+VALUES (2, 'Durand', 'Sophie', 'adp2', '1978-11-22', 1);
 INSERT INTO adherant (id_adherant, nom_adherant, prenom_adherant, password, date_naissance, id_profil)
-VALUES (3, 'Petit', 'Lucas', 'passetud1', '2002-03-15', 2);
+VALUES (3, 'Petit', 'Lucas', 'ade1', '2002-03-15', 2);
 INSERT INTO adherant (id_adherant, nom_adherant, prenom_adherant, password, date_naissance, id_profil)
-VALUES (4, 'Leroy', 'Emma', 'passetud2', '2008-07-30', 2);
+VALUES (4, 'Leroy', 'Emma', 'ade2', '2008-07-30', 2);
 
 -- INSCRIPTION (dates en 2025)
 INSERT INTO inscription (id_inscription, date_debut, date_fin, id_adherant)

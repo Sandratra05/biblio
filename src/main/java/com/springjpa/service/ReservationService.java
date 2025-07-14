@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import com.springjpa.entity.Reservation;
+import com.springjpa.entity.ReservationStatut;
 import com.springjpa.repository.ReservationRepository;
 
 @Service
@@ -19,6 +20,9 @@ public class ReservationService {
 
     @Autowired
     private StatutReservationService statutReservationService;
+
+    @Autowired
+    private ReservationStatutService resaStatutService;
 
     @Autowired
     private LivreService livreService;
@@ -36,7 +40,8 @@ public class ReservationService {
     }
 
     public void reserverUnLivre(Integer id_adherant,Integer id_livre,LocalDateTime dateTime){
-        Reservation resa = new Reservation(id_livre, dateTime, null, statutReservationService.findById(1), livreService.findById(id_livre), adherantService.findById(id_adherant));
+        Reservation resa = new Reservation(id_livre, dateTime, null, livreService.findById(id_livre), adherantService.findById(id_adherant));
         save(resa);
+        resaStatutService.associerStatut(resa, statutReservationService.findById(1));
     }
 }
