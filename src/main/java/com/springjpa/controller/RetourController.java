@@ -67,8 +67,7 @@ public class RetourController {
             penalite.setAdherant(pret.getAdherant());
             penalite.setDuree((int) joursDeRetard);
             penalite.setDatePenalite(dateDeRetour);
-            // Tu peux stocker ou afficher ce nombre selon tes besoins
-            // model.addAttribute("retard", joursDeRetard);
+            
             penaliteService.save(penalite);
         }
 

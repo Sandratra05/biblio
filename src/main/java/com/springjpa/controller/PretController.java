@@ -96,6 +96,7 @@ public class PretController {
     public String preterLivre(@RequestParam("adherantId") int adherantId,
                               @RequestParam("typePret") int typePretId,  
                               @RequestParam("livre") int livreId,
+                              @RequestParam("dateDebut") LocalDate dateDebut, 
                               @RequestParam("dateFin") LocalDate dateFin, 
                               HttpSession session,
                               Model model) {
@@ -181,17 +182,11 @@ public class PretController {
 
         Admin admin = (Admin) session.getAttribute("admin");
 
-        // Pret pret = new Pret(
-        //     LocalDateTime.now(), // Date de début du prêt
-        //     admin, // Admin (à définir selon votre logique, peut-être l'admin connecté)
-        //     typePretService.findById(typePretId), // Type de prêt
-        //     exemplaireOpt, // Exemplaire (le dernier exemplaire vérifié)
-        //     adherant // Adhérant
-        // );
+
         Pret pret = new Pret();
         pret.setAdherant(adherant);
         pret.setAdmin(admin);
-        pret.setDateDebut(LocalDateTime.now());
+        pret.setDateDebut(UtilService.toDateTimeWithCurrentTime(dateDebut));
         pret.setExemplaire(exemplaireOpt);
         pret.setTypePret(typePretService.findById(typePretId));
 

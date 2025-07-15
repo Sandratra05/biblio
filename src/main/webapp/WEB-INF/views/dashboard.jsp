@@ -14,4 +14,4 @@
     <a href="${pageContext.request.contextPath}/prolongement/prets-attente">Pr&ecirc;ts en attentes</a>
     <a href="${pageContext.request.contextPath}/deco">Se d&eacute;connecter</a>
 </body>
-</html>
+</html> 
