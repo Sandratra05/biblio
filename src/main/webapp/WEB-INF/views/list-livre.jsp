@@ -98,7 +98,7 @@
                             <input type="hidden" name="adherant">
                             <button onclick="location.href='${pageContext.request.contextPath}/livre/detail?id=${livre.getIdLivre()}'">Detail</button>
                             <!-- <form action="" method="get"></form> -->
-                            <form action="/biblio-spring-1.0/reservation/reserveBook" method="post">
+                            <form action="${pageContext.request.contextPath}/reservation/reserveBook" method="post">
                                 <input type="hidden" name="livre" value="${livre.idLivre}">
                                 <input type="hidden" name="adherant">
                                 <input type="hidden" name="date" value="<%= java.time.LocalDate.now() %>">

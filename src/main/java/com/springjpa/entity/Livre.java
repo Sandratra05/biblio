@@ -24,18 +24,18 @@ import jakarta.persistence.GenerationType;
 @Entity
 @Table(name = "livre")
 public class Livre {
-    
-    @OneToMany(mappedBy = "livre", fetch = FetchType.EAGER)
-    @JsonManagedReference
-    private List<Exemplaire> exemplaires;
 
-    public List<Exemplaire> getExemplaires() {
-        return exemplaires;
-    }
+    // @OneToMany(mappedBy = "livre", fetch = FetchType.EAGER)
+    // @JsonManagedReference
+    // private List<Exemplaire> exemplaires;
 
-    public void setExemplaires(List<Exemplaire> exemplaires) {
-        this.exemplaires = exemplaires;
-    }
+    // public List<Exemplaire> getExemplaires() {
+    //     return exemplaires;
+    // }
+
+    // public void setExemplaires(List<Exemplaire> exemplaires) {
+    //     this.exemplaires = exemplaires;
+    // }
 
 
     @Id

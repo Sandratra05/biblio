@@ -82,7 +82,7 @@ public class LivreController {
         dto.setCategories(nomsCategories);
 
         // Exemplaires avec disponibilité
-        List<ExemplaireDTO> exemplaireDTOs = livre.getExemplaires().stream()
+        List<ExemplaireDTO> exemplaireDTOs = exemplaireService.findAllExemplaireByIdLivre(livre.getIdLivre()).stream()
             .map(ex -> {
                 boolean dispo = exemplaireService.isExemplaireDisponible(ex.getIdExemplaire(), LocalDateTime.now(), LocalDateTime.now());
                 return new ExemplaireDTO(ex.getIdExemplaire(), dispo);
