@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prêter un Livre</title>
+    <title>Pr&ecirc;ter un Livre</title>
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;

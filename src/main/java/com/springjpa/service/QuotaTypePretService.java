@@ -30,14 +30,25 @@ public class QuotaTypePretService {
     }
 
     public boolean adherantDepasseQuota(Integer idAdherant, Integer idProfil, Integer idTypePret) {
-        System.out.println(">>> APPEL DE adherantDepasseQuota <<< adherant=" + idAdherant + ", profil=" + idProfil + ", typePret=" + idTypePret);
         Integer quota = quotaTypePretRepository.findQuota(idProfil, idTypePret);
+
         if (quota == null) {
-            System.out.println("Pas de quota défini pour profil " + idProfil + " et type " + idTypePret);
             return true;
         }
+
         int nbPrets = pretRepository.countPretsEnCours(idAdherant, idTypePret);
-        System.out.println("Quota autorisé : " + quota + ", prêts en cours : " + nbPrets);
         return nbPrets >= quota;
+    }
+
+    public Integer quotaRestant(Integer idAdherant, Integer idProfil, Integer idTypePret) {
+        Integer quota = quotaTypePretRepository.findQuota(idProfil, idTypePret);
+
+        if (quota == null) {
+            return 0;
+        }
+
+        int nbPrets = pretRepository.countPretsEnCours(idAdherant, idTypePret);
+        return quota - nbPrets;
+
     }
 }

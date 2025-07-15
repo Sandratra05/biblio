@@ -5,16 +5,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import com.springjpa.service.AdherantService;
+import com.springjpa.service.PenaliteService;
 import com.springjpa.service.PretService;
+import com.springjpa.service.QuotaTypePretService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
+
+import com.springjpa.dto.AdherantDTO;
 import com.springjpa.entity.Adherant;
 import com.springjpa.entity.Pret;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -25,6 +33,12 @@ public class AdherantController {
 
     @Autowired
     private PretService pretService;
+
+    @Autowired
+    private PenaliteService penaliteService;
+
+    @Autowired
+    private QuotaTypePretService quotaService;
 
     @GetMapping("/login")
     public String loginForm(Model model) {
@@ -66,5 +80,28 @@ public class AdherantController {
     @GetMapping("/dashboard")
     public String dashboardAdmin() {
         return "dashboard";
+    }
+
+    @GetMapping("/adherant/detail")
+    @ResponseBody
+    public AdherantDTO detailAdherant(@RequestParam("id") Integer idAdherant) {
+        AdherantDTO dto = new AdherantDTO();
+
+        Adherant adherant = adherantService.findById(idAdherant);
+
+        boolean isActif = adherantService.isActif(idAdherant, LocalDateTime.now());
+
+        boolean isPenalised = penaliteService.isPenalise(LocalDateTime.now(), idAdherant);
+        
+        Integer quota = quotaService.quotaRestant(idAdherant, adherant.getProfil().getIdProfil(), 1);
+
+        dto.setNumeroAdherant(adherant.getIdAdherant());
+        dto.setNom(adherant.getNomAdherant());
+        dto.setPrenom(adherant.getPrenomAdherant());
+        dto.setEstAbonne(isActif);
+        dto.setEstPenalise(isPenalised);
+        dto.setQuotaRestant(quota);
+
+        return dto;
     }
 }
