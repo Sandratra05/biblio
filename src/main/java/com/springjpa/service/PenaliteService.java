@@ -100,6 +100,6 @@ public class PenaliteService {
             .collect(Collectors.toList())
             .getFirst();
 
-        return lastpenalite.getDatePenalite().plusDays(lastpenalite.getDuree()).isAfter(date);
+        return lastpenalite.getDatePenalite().plusDays(lastpenalite.getDuree()).isAfter(date) && lastpenalite.getDatePenalite().isBefore(date);
     }
 }
