@@ -145,7 +145,7 @@ public class PretController {
 
         // 5. Vérifier si l'adhérant n'est pas pénalisé
         System.out.println("----------------- CHECK IF ADHERANT IS PENALISED -----------------------------");
-        boolean penalise = penaliteService.isPenalise(UtilService.toDateTimeWithCurrentTime(dateDebut),adherant.getIdAdherant()); 
+        boolean penalise = penaliteService.isPenalise(UtilService.toDateTimeWithCurrentTime(dateDebut), adherant.getIdAdherant()); 
         if (penalise) {
             model.addAttribute("message", "Adhérant pénalisé, prêt impossible.");
             preparePretPage(model);
