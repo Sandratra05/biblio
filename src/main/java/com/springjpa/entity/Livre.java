@@ -1,8 +1,10 @@
 
 package com.springjpa.entity;
 
+import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,6 +25,19 @@ import jakarta.persistence.GenerationType;
 @Table(name = "livre")
 public class Livre {
     
+    @OneToMany(mappedBy = "livre", fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<Exemplaire> exemplaires;
+
+    public List<Exemplaire> getExemplaires() {
+        return exemplaires;
+    }
+
+    public void setExemplaires(List<Exemplaire> exemplaires) {
+        this.exemplaires = exemplaires;
+    }
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_livre")
