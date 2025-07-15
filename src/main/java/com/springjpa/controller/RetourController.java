@@ -59,17 +59,20 @@ public class RetourController {
             return "retour";
         }
 
+        
         FinPret finPret = finPretService.findById(pret.getIdPret());
-
+        
         if (dateDeRetour.isAfter(finPret.getDateFin())) {
-            long joursDeRetard = ChronoUnit.DAYS.between(finPret.getDateFin(), dateDeRetour);
-            Penalite penalite = new Penalite();
-            penalite.setAdherant(pret.getAdherant());
-            penalite.setDuree((int) joursDeRetard);
-            penalite.setDatePenalite(dateDeRetour);
-            
-            penaliteService.save(penalite);
+            penaliteService.appliquerPenaliteSiEnRetard(pret, dateDeRetour);
         }
+
+        //     long joursDeRetard = ChronoUnit.DAYS.between(finPret.getDateFin(), dateDeRetour);
+        //     Penalite penalite = new Penalite();
+        //     penalite.setAdherant(pret.getAdherant());
+        //     penalite.setDuree((int) joursDeRetard);
+        //     penalite.setDatePenalite(dateDeRetour);
+            
+        //     penaliteService.save(penalite);
 
 
         Retour retour = new Retour();
@@ -77,6 +80,7 @@ public class RetourController {
         retour.setDateRetour(dateDeRetour);
 
         retourService.save(retour);
+
         model.addAttribute("success", "Retour enregistré avec succès.");
         model.addAttribute("prets", pretService.findAllEnCoursWithDetails());
 
