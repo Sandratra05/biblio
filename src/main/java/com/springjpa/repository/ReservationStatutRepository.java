@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface ReservationStatutRepository extends JpaRepository<ReservationStatut, ReservationStatutId> {
     @Query("""
@@ -19,4 +20,13 @@ public interface ReservationStatutRepository extends JpaRepository<ReservationSt
         AND rs.statutReservation.id = 1
     """)
     List<ReservationStatut> findReservationsEnAttente();
+
+    @Query("""
+        SELECT COUNT(rs)
+        FROM ReservationStatut rs
+        WHERE rs.statutReservation.id = 1
+        AND rs.reservation.adherant.id = :idAdherant
+    """)
+    int countReservationsEnAttenteByAdherant(@Param("idAdherant") Integer idAdherant);
+
 }

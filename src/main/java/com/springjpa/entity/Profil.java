@@ -25,18 +25,23 @@ public class Profil {
     
     @Column(name = "quota_reservation")
     private Integer quotaReservation;
+
+    @Column(name = "nb_jour_penalite")
+    private Integer nbJourPenalite;
     
     // Constructeurs
     public Profil() {}
     
-    public Profil(Integer idProfil, String nomProfil, Integer quotaPret, Integer quotaReservation) {
+    public Profil(Integer idProfil, String nomProfil, Integer quotaPret, Integer quotaReservation, Integer nbJourPenalite) {
         this.idProfil = idProfil;
         this.nomProfil = nomProfil;
         this.quotaPret = quotaPret;
         this.quotaReservation = quotaReservation;
+        this.nbJourPenalite = nbJourPenalite;
     }
     
     // Getters et Setters
+    
     public Integer getIdProfil() {
         return idProfil;
     }
@@ -67,6 +72,14 @@ public class Profil {
     
     public void setQuotaReservation(Integer quotaReservation) {
         this.quotaReservation = quotaReservation;
+    }
+
+    public Integer getNbJourPenalite() {
+        return nbJourPenalite;
+    }
+
+    public void setNbJourPenalite(Integer nbJourPenalite) {
+        this.nbJourPenalite = nbJourPenalite;
     }
 
 }

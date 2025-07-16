@@ -64,7 +64,7 @@
                 ${success}
             </div>
         </c:if>
-        <form action="reserveBook" method="post">
+        <form action="${pageContext.request.contextPath}/reservation/reserveBook" method="post">
             <label for="adherant">Num&eacute;ro adh&eacute;rant</label>
             <select id="adherant" name="adherant">
                 <option value="">--Choisir un adh&eacute;rant--</option>

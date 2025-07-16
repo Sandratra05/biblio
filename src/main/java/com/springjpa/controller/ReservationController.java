@@ -64,27 +64,33 @@ public class ReservationController {
                                 @RequestParam(value = "adherant", required = false) Integer idAdherant,
                                 @RequestParam(value = "date", required = false) LocalDate date,
                                 RedirectAttributes redirectAttributes,
-                                HttpSession session) {
+                            HttpSession session) {
 
         if (id_livre == null || date == null) {
             redirectAttributes.addFlashAttribute("error", "Le livre et la date sont obligatoires.");
             return "redirect:/reservation";
         }
 
-        Integer idAdhe = null;
-        Adherant adherant = (Adherant) session.getAttribute("adherant");
-        
-        if (adherant != null && adherant.getIdAdherant() > 0) {
-            idAdhe = adherant.getIdAdherant();
-        } else if (idAdherant != null) {
-            idAdhe = idAdherant;
-        } else {
-            redirectAttributes.addFlashAttribute("error", "Aucun adhérant spécifié.");
-            return "redirect:/reservation";
-        }
+        Adherant adherant = adherantService.findById(idAdherant);
+        // Adherant adherant = (Adherant) session.getAttribute("adherant");
 
-        LocalDateTime dateTime = UtilService.toDateTimeWithCurrentTime(date);
-        reservationService.reserverUnLivre(idAdhe, id_livre, dateTime);
+        if (adherant != null && adherant.getIdAdherant() > 0) {
+            int countResa = reservationService.countReservationEnAttente(adherant.getIdAdherant());
+
+            int quotaResa = adherant.getProfil().getQuotaReservation();
+
+            if (countResa >= quotaResa) {
+                redirectAttributes.addFlashAttribute("error", "Quota de réservation depassé");
+                return "redirect:/reservation";
+            }
+            
+            LocalDateTime dateTime = UtilService.toDateTimeWithCurrentTime(date);
+            reservationService.reserverUnLivre(adherant.getIdAdherant(), id_livre, dateTime);
+            
+        } else {
+        redirectAttributes.addFlashAttribute("error", "Aucun adhérant spécifié.");
+        return "redirect:/reservation";
+    }
 
         redirectAttributes.addFlashAttribute("success", "Réservation réussie, passez à la bibliothèque le " + date);
         return "redirect:/reservation";

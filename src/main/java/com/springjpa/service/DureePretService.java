@@ -23,4 +23,8 @@ public class DureePretService {
     public void save(DureePret dureePret){
         dureePretRepository.save(dureePret);
     }
+
+    public DureePret findByIdProfil(Integer idProfil) {
+        return dureePretRepository.findByIdProfil(idProfil);
+    }
 }

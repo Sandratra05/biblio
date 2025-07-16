@@ -1,3 +1,8 @@
+CREATE TABLE ferie (
+   id_ferie INT PRIMARY KEY AUTO_INCREMENT, 
+   jour_ferie DATETIME
+);
+
 CREATE TABLE auteur(
    id_auteur INT,
    nom_auteur VARCHAR(50) NOT NULL,

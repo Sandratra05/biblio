@@ -107,10 +107,12 @@ public class PenaliteService {
         if (!dateRetour.isAfter(dateFinPrevue)) return;
 
         // Calcul de la durée du retard
-        long joursDeRetard = Duration.between(dateFinPrevue, dateRetour).toDays();
-        if (joursDeRetard <= 0) return;
-
+        // long joursDeRetard = Duration.between(dateFinPrevue, dateRetour).toDays();
+        // if (joursDeRetard <= 0) return;
+        
         Adherant adherant = pret.getAdherant();
+        
+        int dureePenalite = adherant.getProfil().getNbJourPenalite(); 
 
         // Récupérer toutes les pénalités de l'adhérant
         List<Penalite> penalites = penaliteRepository.findByAdherant(adherant);
@@ -139,7 +141,7 @@ public class PenaliteService {
         Penalite nouvellePenalite = new Penalite();
         nouvellePenalite.setAdherant(adherant);
         nouvellePenalite.setDatePenalite(nouvelleDatePenalite);
-        nouvellePenalite.setDuree((int) joursDeRetard);
+        nouvellePenalite.setDuree(dureePenalite);
 
         penaliteRepository.save(nouvellePenalite);
     }

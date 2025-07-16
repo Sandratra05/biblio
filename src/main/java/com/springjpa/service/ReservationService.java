@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.springjpa.entity.Reservation;
 import com.springjpa.entity.ReservationStatut;
 import com.springjpa.repository.ReservationRepository;
+import com.springjpa.repository.ReservationStatutRepository;
 
 @Service
 public class ReservationService {
@@ -23,6 +24,9 @@ public class ReservationService {
 
     @Autowired
     private ReservationStatutService resaStatutService;
+
+    @Autowired
+    private ReservationStatutRepository reservationStatutRepository;
 
     @Autowired
     private LivreService livreService;
@@ -43,5 +47,9 @@ public class ReservationService {
         Reservation resa = new Reservation(id_livre, dateTime, null, livreService.findById(id_livre), adherantService.findById(id_adherant));
         save(resa);
         resaStatutService.associerStatut(resa, statutReservationService.findById(1));
+    }
+
+    public int countReservationEnAttente(Integer idAdherant) {
+        return reservationStatutRepository.countReservationsEnAttenteByAdherant(idAdherant);
     }
 }

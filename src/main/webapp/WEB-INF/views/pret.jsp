@@ -106,8 +106,8 @@
         <label for="dateDebut">Date du pr&ecirc;t :</label>
         <input type="date" name="dateDebut" id="dateDebut" required>
         
-        <label for="dateFin">Date de fin du pr&ecirc;t :</label>
-        <input type="date" name="dateFin" id="dateFin" required>
+        <!-- <label for="dateFin">Date de fin du pr&ecirc;t :</label>
+        <input type="date" name="dateFin" id="dateFin" required> -->
         <button type="submit">Valider le pr&ecirc;t</button>
     </form>
     <a href="dashboard"><button type="button">Retour</button></a>

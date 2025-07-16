@@ -4,12 +4,15 @@ import com.oracle.wls.shaded.org.apache.xpath.operations.Bool;
 import com.springjpa.entity.Adherant;
 import com.springjpa.entity.Admin;
 import com.springjpa.entity.Exemplaire;
+import com.springjpa.entity.Ferie;
 import com.springjpa.entity.FinPret;
 import com.springjpa.entity.Livre;
 import com.springjpa.entity.Pret;
 import com.springjpa.service.AdherantService;
 import com.springjpa.service.AdminService;
+import com.springjpa.service.DureePretService;
 import com.springjpa.service.ExemplaireService;
+import com.springjpa.service.FerieService;
 import com.springjpa.service.FinPretService;
 import com.springjpa.service.LivreService;
 import com.springjpa.service.PenaliteService;
@@ -73,10 +76,16 @@ public class PretController {
     private AdminService adminService; 
 
     @Autowired
+    private DureePretService dureePretService;
+
+    @Autowired
     private PenaliteService penaliteService;
 
     @Autowired
     private FinPretService finPretService;
+
+    @Autowired
+    private FerieService ferieService;
 
     private void preparePretPage(Model model) {
         model.addAttribute("livres", livreService.findAll());
@@ -97,7 +106,7 @@ public class PretController {
                               @RequestParam("typePret") int typePretId,  
                               @RequestParam("livre") int livreId,
                               @RequestParam("dateDebut") LocalDate dateDebut, 
-                              @RequestParam("dateFin") LocalDate dateFin, 
+                            //   @RequestParam("dateFin") LocalDate dateFin, 
                               HttpSession session,
                               Model model) {
 
@@ -126,6 +135,18 @@ public class PretController {
 
             return "pret";
         }
+
+        // Raha ohatra ka tsy determiner-na ny date fin fa raha ohatra ka anaty base ny duree ana pret
+        int dureePret = dureePretService.findByIdProfil(adherant.getProfil().getIdProfil()).getDuree();
+        LocalDate dateFin = dateDebut.plusDays(dureePret);
+
+        // 2. Vérification jour férié
+        List<LocalDate> joursFeries = ferieService.findAll().stream()
+            .map(ferie -> ferie.getJourFerie())
+            .toList();
+
+        dateFin = ajusterDateSiFerie(dateFin, joursFeries);
+
 
         System.out.println("----------------- LOOP FOR EXEMPLAIRE");
         for (Exemplaire exemplaire : exemplaires) {
@@ -207,5 +228,12 @@ public class PretController {
         // Redirection vers la page de confirmation ou d'accueil après le prêt
         return "pret";
         
+    }
+
+    private LocalDate ajusterDateSiFerie(LocalDate dateFin, List<LocalDate> joursFeries) {
+        while (joursFeries.contains(dateFin)) {
+            dateFin = dateFin.plusDays(1);
+        }
+        return dateFin;
     }
 }
